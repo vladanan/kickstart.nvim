@@ -76,6 +76,11 @@ https://www.reddit.com/r/neovim/comments/zko4tf/difficulty_loading_telescopenvim
 
 https://github.com/nvim-telescope/telescope.nvim
 
+https://github.com/nvim-lua/kickstart.nvim
+
+~$ go version
+go version go1.22.5 linux/amd64
+
 -------------------------
 
 https://github.com/nvim-lua/kickstart.nvim
