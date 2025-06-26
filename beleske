@@ -196,7 +196,8 @@ require('lazy').setup({
 POKUSAJ DA SE FORK NA GITGUB USKLADI SA ORIGINALNIM REPOOM IAKO OBA IMAJU NOVE COMMIT
 
 https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-repository-for-a-fork
+git remote add upstream https://github.com/nvim-lua/kickstart.nvim 
+
 https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork
 https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line
 
-git remote add upstream https://github.com/nvim-lua/kickstart.nvim 
