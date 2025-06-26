@@ -90,10 +90,19 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
-vim.keymap.set("n", "Q", "<nop>")
+-- Vimscr Lua (for Neovim with init.lua)
+
+--vim.cmd [[
+--  highlight Normal guibg=none
+--  highlight NonText guibg=none
+--  highlight Normal ctermbg=none
+--  highlight NonText ctermbg=none
+--]]
+
+vim.keymap.set('n', 'Q', '<nop>')
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = false
@@ -108,7 +117,6 @@ vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 vim.opt.relativenumber = true
-
 
 vim.opt.tabstop = 2
 vim.opt.softtabstop = 2
@@ -277,7 +285,24 @@ require('lazy').setup({
   --
   -- Here is a more advanced example where we pass configuration
   -- options to `gitsigns.nvim`.
-  --
+  {
+    'xiyaowong/transparent.nvim',
+    lazy = false,
+    config = function()
+      require('transparent').setup {
+        -- Optional: Customize transparency settings
+        groups = { -- table: groups to make transparent
+          'Normal',
+          'NormalFloat',
+          'FloatBorder',
+          'TelescopeBorder',
+          'TelescopeNormal',
+        },
+        -- Or, set default groups (see #20)
+        default_groups = true,
+      }
+    end,
+  },
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
@@ -312,7 +337,7 @@ require('lazy').setup({
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.opt.timeoutlen
-      delay = 0,
+      delay = 2000,
       icons = {
         -- set icon mappings to true if you have a Nerd Font
         mappings = vim.g.have_nerd_font,
@@ -434,7 +459,7 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
-      vim.keymap.set("n", "<leader>ff", vim.cmd.Ex)
+      vim.keymap.set('n', '<leader>ff', vim.cmd.Ex)
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
@@ -940,7 +965,10 @@ require('lazy').setup({
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function()
-        return '%2l:%-2v'
+        -- return '%2l:%-2v'
+        -- return '%l|%L││%2v|%-2{virtcol("$") - 1}'
+        -- podeseno da prikazuje broj linija, ukupan broj linija i broj colone sa spacingom za dve cifre
+        return '%l/%L:%2v'
       end
 
       -- ... and there is more!
