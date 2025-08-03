@@ -1,5 +1,4 @@
 2024-10-10 07:57:50
-
 nvim d
 
 https://neovim.io/doc/user/vimindex.html
@@ -200,4 +199,210 @@ git remote add upstream https://github.com/nvim-lua/kickstart.nvim
 
 https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork
 https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line
+
+---
+
+kopiranje yankovanog teksta u telescope find:
+Ctrl+r i dobija se spisak registera/bufera sa kopiranim tekstom i ostalim stvarima kao sto je poslednja komanda ili ime fajla u drugom bufferu itd., 0 je poslednji yank
+
+tako da se to moze sa Ctrl+r 0
+
+---
+
+find & replace za ceo projekat tj. sve fajlove u folderu
+
+prvo space sg za live_grep
+zatim se upise ono sto se trazi i kada se spisak sredi
+Ctrl+q da se ubaci u Quickfix list
+
+Once the results are in the Quickfix list, use the cfdo command to execute a substitution command on each file listed in the Quickfix list.
+The command structure is: cfdo %s/<old-string>/<new-string>/g | update | bd
+
+    cfdo: Executes the following command on each file in the Quickfix list.
+
+%s/<old-string>/<new-string>/g: This is the standard Vim substitution command.
+
+    %: Applies the substitution to the entire file.
+
+s: Indicates a substitution.
+<old-string>: The string or pattern to find.
+<new-string>: The string to replace it with.
+g: (Global) Replaces all occurrences within each line.
+
+| update: Saves the changes to the file after the substitution.
+| bd: da se pobrisu bafferi da se sistem ne opterecuje jer moze biti mnogo fajlova
+
+mozda ce da javi gresku sa treesiter ali ne obracati paznju i pregledati fajlove
+
+---
+
+nalazenje nvim konfiguracionih fajlova, zgodno za ove beleske i init.lua:
+
+Space tj. leader sn
+
+leader leader daje spisak otvorenih buffera
+
+---
+
+iz telescope se sa Ctrl+v otvara obelezeni fajl kao vertical split
+
+
+---
+
+u v rezim sa Shift j/k tj. J K red ili blok ide gore dole
+
+---
+
+za pregled greske lsp-a u nvim <leader>ca
+
+---
+
+
+copiranje fajla u netrw:
+
+prvo se obelezi target folder: ode se na . u vrhu spiska i pritisne mt
+zatim se obelezi fajl za kopiranje: ode se na sam fajl i pritisne mf
+zatim se uradi kopiranje sa: mc
+onda netrw pita za ime novog fajla i kada se upise onda se potvrdi sa y
+
+----
+
+kada se nalazis iznad neke funkcije sa grr se ide na definiciju, referencu, implementaciju
+
+iznad neke promenljive sa: grn se dobija meni da se ta promenljiva preimenuje svuda kao u vsc, ODNOSI SE I NA DRUGE FAJLOVE
+
+---
+
+kada se pritisne slovo neke komande i saceka dobija se meni sa svim opcijama a na kraju koliko jos opcija ima sa dodatnim slovima u komandi
+i to vazi za sve komande:
+
+y = copy
+d = cut/delete
+c = change
+g = go
+
+---
+
+:wa save all
+
+. ponavlja poslednju komandu tipa dd i slicno tj. ponavlja sve sto je uradjeno u insert modu
+
+ovo moze da se koristi da se sa find (ili obrnuti find koji se dobija sa shift / tj. ?) menja nesto uzatopno tako sto se nesto nadje sa n i uradi ista promena sa .
+
+---
+
+zz centrira tekst oko aktivnog kursora tako da bude kursor na sredini ekrana
+
+---
+
+0 ide bukvalno na pocetak linije a ^ shift+6 ide na prvo slovo linije
+
+f + slovo ide na to slovo ; ponavlja zadnju potragu a , ponavlja unazad
+
+== poravnjava tekucu liniju sa onom iznad nje
+
+R daje replace mode tako da prepisuje sve redom
+
+diw brise celu rec dok dw brise od pozicije kursora do kraja reci, umesto w moze da bude i " za sve izmedju navodnika ili { za sve izmedju zagrade tj. sve u funkciji ili p za ceo paragraf ili f aktuelni granicnik
+
+isto to vazi i za y tj. vec korisceno yiw itd. a vazi i za a umesto i gde se brise okvir w"{ i oznaka okvira
+
+---
+
+alt+ jklh b cini da se izadje iz insert moda tako da nema potrebe da se radi remaping za esc/caps/jj/jk ctrl+[ itd.
+
+https://vim.fandom.com/wiki/Avoid_the_escape_key
+Avoiding the Esc key
+If you have an American English keyboard, pressing Ctrl-[ (control plus left square bracket) is equivalent to pressing Esc. This provides an easy way to exit from insert mode.
+
+Use Alt/Meta In a Terminal
+Alt keys appear on most PC keyboards. Meta keys were used on some old systems.
+
+If you use Vim in a terminal, simply press alt/meta+normal_mode_key. Most terminals send an escape character followed by the normal_mode_key that you pressed, removing the need to press escape yourself.
+
+The terminals konsole and gnome terminal send the escape by default when you press alt/meta+normal_mode_key.
+Thus in insert mode pressing alt+h alt+j alt+k alt+l all take you to normal mode and move in the expected direction. You can hold down alt when moving even while in normal mode since the additional ESC that is sent does no harm.
+
+The advantage of using this scheme is that you can use the alt/meta+key combination with any normal mode key, e.g.
+
+Alt+o opens a new line below the one you are currently editing,
+Alt+A appends to the end of the current line,
+Alt+p pastes at the current insert location.
+Alt+k moves up
+Thus using vim via a terminal gives you these short cut powers on any stock standard system without the need to edit each systems vim mappings.
+
+---
+
+only delete not copy with d etc and cut with Ctrl + x ?
+
+https://vi.stackexchange.com/questions/25474/stop-the-normal-mode-delete-commands-from-copying-text
+https://stackoverflow.com/questions/11993851/how-to-delete-not-cut-in-vim
+
+:reg dobija se spisag registara, isto se dobija i sa "
+na "* je register iz spoljnih aplikacija, "0 je yanked, "" je default tj. zadnji koriscen
+
+Use the "black hole register", "_ to really delete something: "_d.
+ova komanda ne kopira nista u neki register
+
+na ovaj nacin se izbegavaju remapiranja a osim toga se sa svakim remapiranjem gubi funkcija necega drugog
+
+primer remapiranja:
+For Neovim users, add that to your init.lua:
+-- Prevent deleting from also copying
+vim.keymap.set({'n', 'v'}, 'd', '"_d', { noremap = true })
+vim.keymap.set('n', 'dd', '"_dd', { noremap = true })
+
+---
+
+gj = ^ (first character on line jer g0 ide na pocetak linije isto kao i 0)
+
+vim.keymap.set({ 'n', 'v' }, 'gj', '^', { desc = 'Go to first character on line' })
+
+---
+
+ovo preskacem za sada da vidim da li mogu da ostanem na :
+
+Space + ;  =  : (command mode)
+avoiding irritations from accidental use of CapsLock: 
+CapsLock = : (command mode)?
+CapsLock + CapsLock = CapsLock?
+
+---
+
+
+gj - move cursor down (multi-line text)
+gk - move cursor up (multi-line text) 
+
+---
+
+ovo je kao ctrl+f5 na kate i na notepad
+This appends the current date and time after the cursor (in <> notation <>).
+
+:map <F2> a<C-R>=strftime("%c")<CR><Esc>
+
+-- iz nekog komplikovanog razloga nvim vidi F5 kao F5 ali Ctrl+F5 vidi kao F29:
+-- https://github.com/neovim/neovim/issues/7384
+-- %c daje lokalni datum tj. sa cirilicom pa sam nasao da za c/c++ funkciju strftime bolji izgled daju (%F %T)
+
+a<C-R>=strftime("%F %T")<CR><Esc>
+
+a: This stands for "append" mode. It allows you to enter insert mode after the current character under the cursor.
+
+<C-R>: This is a Vim control sequence for Ctrl+R. When pressed in insert mode, it allows you to insert the output of an expression or command.
+
+=: This means you're going to evaluate an expression or command.
+
+strftime("%F %T"): This is the command being evaluated. strftime is a Vim function that returns the current date and time in a specific format:
+
+  %F corresponds to the date in the format YYYY-MM-DD.
+
+  %T corresponds to the time in the format HH:MM:SS.
+
+<CR>: This simulates pressing Enter (Carriage Return). It executes the command and returns the result to insert mode.
+
+<Esc>: After executing the command, the <Esc> escapes insert mode and returns you to normal mode.
+
+---
+
+The Vi editor was originally written on an ADM-3A terminal, which had the Escape key positioned where the Tab key occurs on most modern keyboards. 
 

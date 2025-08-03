@@ -200,6 +200,16 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- gj = ^ (first character on line jer g0 ide na pocetak linije isto kao i 0)
+vim.keymap.set({ 'n', 'v' }, 'gj', '^', { desc = 'Go to first character on line' })
+
+-- ovo je kao ctrl+f5 na kate i na notepad
+-- :map <F2> a<C-R>=strftime("%c")<CR><Esc>
+-- iz nekog komplikovanog razloga nvim vidi F5 kao F5 ali Ctrl+F5 vidi kao F29:
+-- https://github.com/neovim/neovim/issues/7384
+-- %c daje lokalni datum tj. sa cirilicom pa sam nasao da za c/c++ funkciju strftime bolji izgled daju (%F %T)
+vim.keymap.set('n', '<F29>', 'a<C-R>=strftime("%F %T")<CR><Esc>', { desc = 'This appends the current date and time after the cursor' })
+
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
 -- is not what someone will guess without a bit more experience.
@@ -453,7 +463,9 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          find_files = { hidden = true },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -976,7 +988,7 @@ require('lazy').setup({
         -- return '%2l:%-2v'
         -- return '%l|%L││%2v|%-2{virtcol("$") - 1}'
         -- podeseno da prikazuje broj linija, ukupan broj linija i broj colone sa spacingom za dve cifre
-        return '%l/%L:%2v'
+        return '%l/%L : %v'
       end
 
       -- ... and there is more!
