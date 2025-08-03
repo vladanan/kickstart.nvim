@@ -406,3 +406,32 @@ strftime("%F %T"): This is the command being evaluated. strftime is a Vim functi
 
 The Vi editor was originally written on an ADM-3A terminal, which had the Escape key positioned where the Tab key occurs on most modern keyboards. 
 
+---
+
+2025-08-03 13:20:57
+
+vimtutor
+vim tutor
+
+333gg id na liniju 413
+
+zapamti da su a i p analogni jer ubacuju nakon kursora, a P i i jer ubacuju ispred kurora
+
+% nalazi uparene zagrade ([{
+
+:%s/staro/novo/gc
+
+% kaze da se gleda ceo fajl
+g kaze da se gleda cela linija
+c trazi potvrdu pre zamene
+
+:w filename.ext cuva aktuelni fajl pod drugim imenom tj. radi copy
+
+v pa :w filename cuva obelezeni deo teksta u v rezimu kao novi fajl
+
+:r filename ubacuje fajl ispod kursora
+:r !ls ubacuje ls output ispod kursora
+
+umesto sa ctrl+n/p moze da se ide kroz completition meni sa tab i shift+tab
+
+
