@@ -90,9 +90,6 @@ P.S. You can delete this when you're done too. It's your config now! :)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
-vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
-
 -- Vimscr Lua (for Neovim with init.lua)
 
 --vim.cmd [[
@@ -200,8 +197,43 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
+-- da se ceo red ili blok pomera gore dole
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+
+-- OVO MORA U colorscheme tokyo dole negde na 950 liniji jer kada se ovde podesi onda se tamo resetuje tako da ili da se uradi nakon teme ovako sistemski ili u okviru teme
+-- Set the foreground color of inactive tabs to a dark gray
+--vim.api.nvim_set_hl(0, "TabLine", { fg = "#767676", bg = "#2c2e34", bold = false })
+--vim.api.nvim_set_hl(0, 'TabLine', { fg = '#b1a6f7', bg = '#111110', bold = false })
+-- Set the foreground color of the active tab to a lighter color
+-- vim.api.nvim_set_hl(0, "TabLineSel", { fg = "#ffffff", bg = "#2c2e34", bold = true })
+-- Set the background color of the fill area
+-- vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#2c2e34" })
+
 -- gj = ^ (first character on line jer g0 ide na pocetak linije isto kao i 0)
-vim.keymap.set({ 'n', 'v' }, 'gj', '^', { desc = 'Go to first character on line' })
+-- ovo se kosi sa gj pokretanjem unutar linije koja je na vise linija u ekranu, druga komanda za o je gk
+-- tako da ostaje ^
+--vim.keymap.set({ 'n', 'v' }, 'g0', '^', { desc = 'Go to first character on line' })
+
+-- da se prebacuje na novi tab ne sa gt nego sa komfornijim i vec naucenim ctrl+tab a sa namerom da se shift+tab koristi za tab switch u konsole i alt+tab za programe (i mozda nesto trece za switch desktop)
+--vim.keymap.set('n', '<C-Tab>', 'gt', { desc = 'Go to next tab' })
+-- ovo dole ne radi iako je tmux podesen kako treba pa sam prebacio na leader varijante
+--vim.keymap.set('n', '<C-S-Tab>', 'gT', { desc = 'Go to next tab' })
+vim.keymap.set('n', '<leader>h', 'gT', { desc = 'Go to previous tab' })
+vim.keymap.set('n', '<leader>l', 'gt', { desc = 'Go to previous tab' })
+
+-- precica za init.lua ali ne treba jer se spisak conf fajlova za nvim dobijaju sa <leader>sn
+--vim.api.nvim_set_keymap('n', '<leader>si', ':tabnew /home/vladan/.config/nvim/init.lua<CR>', { noremap = true, silent = true })
+-- precica za fajl sa beleskama koji je obicno u dir ispod root dir za projekat
+vim.api.nvim_set_keymap('n', '<leader>sb', ':tabnew ../beleske-esim.md<CR>', { noremap = true, silent = true })
+
+-- da osvezavaju bufferi kada se primeti promena stanja na disku, kao recimo git checkout branch, ili se fajl promeni u nekon drugom editoru ili programu ali ovo dole ne radi
+vim.cmd 'set autoread'
+vim.cmd 'au CursorHold * checktime'
+
+-- da se fajl cuva sa leader w umesto :w ali ovo usporava kucanje?
+--vim.keymap.set({ 'i', 'x', 'n', 's', 'v' }, '<leader>w', '<cmd>w<cr><esc>', { desc = 'Save file' })
+vim.keymap.set({ 'n', 'v' }, '<leader>w', '<cmd>w<cr><esc>', { desc = 'Save file' })
 
 -- ovo je kao ctrl+f5 na kate i na notepad
 -- :map <F2> a<C-R>=strftime("%c")<CR><Esc>
@@ -463,6 +495,12 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
+        defaults = {
+          file_ignore_patterns = {
+            'node_modules',
+            '.git',
+          },
+        },
         pickers = {
           find_files = { hidden = true },
         },
@@ -616,6 +654,8 @@ require('lazy').setup({
           -- Fuzzy find all the symbols in your current document.
           --  Symbols are things like variables, functions, types, etc.
           map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
+
+          --vim.keymap.set('n', '<leader>ls', vim.lsp.buf.document_symbol, { desc = 'LSP Document Symbols' })
 
           -- Fuzzy find all the symbols in your current workspace.
           --  Similar to document symbols, except searches over your entire project.
@@ -930,7 +970,7 @@ require('lazy').setup({
     },
   },
 
-  { -- You can easily change to a different colorscheme.
+  { -- You can easily change to a different COlorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
     --
@@ -943,6 +983,17 @@ require('lazy').setup({
         styles = {
           comments = { italic = false }, -- Disable italics in comments
         },
+        --on_highlights = function(hl, colors)
+        on_highlights = function(hl)
+          hl.Comment = { fg = '#8c886c', italic = false } -- Example: change to a specific grey and make it italic
+          -- You can also use colors from the tokyonight palette:
+          -- hl.Comment = { fg = colors.green, italic = true }
+          --vim.api.nvim_set_hl(0, 'TabLine', { fg = '#b1a6f7', bg = '#111110', bold = false })
+          hl.TabLine = {
+            bg = '#111110',
+            fg = '#b1a6f7',
+          }
+        end,
       }
 
       -- Load the colorscheme here.
