@@ -201,6 +201,38 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
+-- da pokaze u komandoj liniji ime func u kojoj se nalazi kursor
+--vim.keymap.set('n', '<F2>', function()
+--  local line = vim.fn.search([[^\s*func\s\+]], 'bWn')
+--  if line > 0 then
+--    print(vim.fn.getline(line))
+--  end
+--end)
+-- isto samo u floating prozorcicu
+vim.keymap.set('n', '<F2>', function()
+  local line = vim.fn.search([[^\s*func\s\+]], 'bWn')
+  if line == 0 then
+    return
+  end
+
+  local text = vim.fn.getline(line)
+
+  vim.lsp.util.open_floating_preview(
+    { text }, -- contents (array of lines)
+    'go', -- filetype
+    {
+      border = 'rounded',
+      focusable = false,
+    }
+  )
+end)
+
+-- da umesto 'default' theme bude uvek ukljucena 'quiet' tema
+-- negde na liniji 1002 je iskljucena tema tokyonight
+-- ali na quiet se ne vidi lepo ni potpis func sa shift+k, ni aktivna func za koju sam dole podesio F2 a na default se vidi lepo, tako da mora da se vidi da se ili finije podesi shift+K F2 na quiet i to sam uradio tako sto sam napravio svoju novu temu quietv po uputstvu na https://neovim.io/doc/user/usr_06.html i dodao:
+--  hi NormalFloat guifg=#dadada guibg=NONE gui=NONE cterm=NONE i sada radi lepo a videcu sta jos mogu da podesim ako mi zatreba
+vim.cmd 'colorscheme quietv'
+
 -- OVO MORA U colorscheme tokyo dole negde na 950 liniji jer kada se ovde podesi onda se tamo resetuje tako da ili da se uradi nakon teme ovako sistemski ili u okviru teme
 -- Set the foreground color of inactive tabs to a dark gray
 --vim.api.nvim_set_hl(0, "TabLine", { fg = "#767676", bg = "#2c2e34", bold = false })
@@ -231,9 +263,9 @@ vim.api.nvim_set_keymap('n', '<leader>sb', ':tabnew ../beleske-esim.md<CR>', { n
 vim.cmd 'set autoread'
 vim.cmd 'au CursorHold * checktime'
 
--- da se fajl cuva sa leader w umesto :w ali ovo usporava kucanje?
---vim.keymap.set({ 'i', 'x', 'n', 's', 'v' }, '<leader>w', '<cmd>w<cr><esc>', { desc = 'Save file' })
-vim.keymap.set({ 'n', 'v' }, '<leader>w', '<cmd>w<cr><esc>', { desc = 'Save file' })
+-- da se svi fajlovi cuvaju sa leader w umesto :wa ali ovo usporava kucanje?
+--vim.keymap.set({ 'i', 'x', 'n', 's', 'v' }, '<leader>w', '<cmd>wa<cr><esc>', { desc = 'Save file' })
+vim.keymap.set({ 'n', 'v' }, '<leader>w', '<cmd>wa<cr><esc>', { desc = 'Save file' })
 
 -- ovo je kao ctrl+f5 na kate i na notepad
 -- :map <F2> a<C-R>=strftime("%c")<CR><Esc>
@@ -970,38 +1002,38 @@ require('lazy').setup({
     },
   },
 
-  { -- You can easily change to a different COlorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
-        --on_highlights = function(hl, colors)
-        on_highlights = function(hl)
-          hl.Comment = { fg = '#8c886c', italic = false } -- Example: change to a specific grey and make it italic
-          -- You can also use colors from the tokyonight palette:
-          -- hl.Comment = { fg = colors.green, italic = true }
-          --vim.api.nvim_set_hl(0, 'TabLine', { fg = '#b1a6f7', bg = '#111110', bold = false })
-          hl.TabLine = {
-            bg = '#111110',
-            fg = '#b1a6f7',
-          }
-        end,
-      }
+  --{ -- You can easily change to a different COlorscheme.
+  --  -- Change the name of the colorscheme plugin below, and then
+  --  -- change the command in the config to whatever the name of that colorscheme is.
+  --  --
+  --  -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  --  'folke/tokyonight.nvim',
+  --  priority = 1000, -- Make sure to load this before all the other start plugins.
+  --  config = function()
+  --    ---@diagnostic disable-next-line: missing-fields
+  --    require('tokyonight').setup {
+  --      styles = {
+  --        comments = { italic = false }, -- Disable italics in comments
+  --      },
+  --      --on_highlights = function(hl, colors)
+  --      on_highlights = function(hl)
+  --        hl.Comment = { fg = '#8c886c', italic = false } -- Example: change to a specific grey and make it italic
+  --        -- You can also use colors from the tokyonight palette:
+  --        -- hl.Comment = { fg = colors.green, italic = true }
+  --        --vim.api.nvim_set_hl(0, 'TabLine', { fg = '#b1a6f7', bg = '#111110', bold = false })
+  --        hl.TabLine = {
+  --          bg = '#111110',
+  --          fg = '#b1a6f7',
+  --        }
+  --      end,
+  --    }
 
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
-    end,
-  },
+  --    -- Load the colorscheme here.
+  --    -- Like many other themes, this one has different styles, and you could load
+  --    -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+  --    vim.cmd.colorscheme 'tokyonight-night'
+  --  end,
+  --},
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
