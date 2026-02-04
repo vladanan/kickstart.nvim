@@ -32,7 +32,7 @@ hi! link Debug Special
 hi! link Delimiter Special
 hi! link Exception Statement
 hi! link Float Constant
-hi! link Function Identifier
+" hi! link Function Identifier
 hi! link Include PreProc
 hi! link Keyword Statement
 hi! link Label Statement
@@ -51,6 +51,14 @@ hi! link Typedef Type
 hi! link lCursor Cursor
 hi! link debugBreakpoint ModeMsg
 hi! link debugPC CursorLine
+
+"@markup        xxx links to Special
+"@markup.strong xxx cterm=bold gui=bold
+"@markup.italic xxx cterm=italic gui=italic
+"@markup.strikethrough xxx cterm=strikethrough gui=strikethrough
+"@markup.underline xxx links to Underlined
+"@markup.heading xxx links to Title
+"@markup.link   xxx links to Identifier
 
 if &background ==# 'dark'
   if (has('termguicolors') && &termguicolors) || has('gui_running')
@@ -104,20 +112,26 @@ if &background ==# 'dark'
   hi SpellRare guifg=#00afaf guibg=NONE guisp=#00afaf gui=undercurl cterm=underline
   hi StatusLine guifg=#000000 guibg=#dadada gui=bold cterm=bold
   hi StatusLineNC guifg=#707070 guibg=#000000 gui=reverse cterm=reverse
-  hi TabLine guifg=#707070 guibg=#000000 gui=reverse cterm=reverse
+  "hi TabLine guifg=#707070 guibg=#000000 gui=reverse cterm=reverse
+  hi TabLine guifg=#8c886c guibg=#000000 gui=reverse cterm=reverse
   hi TabLineFill guifg=#dadada guibg=NONE gui=NONE cterm=NONE
-  hi TabLineSel guifg=#000000 guibg=#dadada gui=bold cterm=bold
-  hi Title guifg=NONE guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
+  "hi TabLineSel guifg=#000000 guibg=#dadada gui=bold cterm=bold
+  hi TabLineSel guifg=#42c3fc guibg=#111110 gui=NONE cterm=NONE
+  "hi Title guifg=NONE guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
+  hi Title guifg=#36b23f guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
+  hi @markup guifg=#ffaf00 guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
   hi VertSplit guifg=#707070 guibg=#000000 gui=NONE cterm=NONE
   hi Visual guifg=#ffaf00 guibg=#000000 gui=reverse cterm=reverse
   hi VisualNOS guifg=NONE guibg=#303030 gui=NONE cterm=NONE
   hi WarningMsg guifg=#dadada guibg=NONE gui=NONE cterm=NONE
   hi NormalFloat guifg=#dadada guibg=NONE gui=NONE cterm=NONE
   hi WildMenu guifg=#00afff guibg=#000000 gui=bold cterm=bold
-  hi Comment guifg=#707070 guibg=NONE gui=bold cterm=bold
+  " hi Comment guifg=#707070 guibg=NONE gui=NONE cterm=NONE
+  hi Comment guifg=#8c886c guibg=NONE gui=NONE cterm=NONE
   hi Constant guifg=#dadada guibg=NONE gui=NONE cterm=NONE
   hi Error guifg=#ff005f guibg=#000000 gui=bold,reverse cterm=bold,reverse
   hi Identifier guifg=#dadada guibg=NONE gui=NONE cterm=NONE
+  hi Function guifg=#029be0 guibg=NONE gui=NONE cterm=NONE
   hi Ignore guifg=#dadada guibg=NONE gui=NONE cterm=NONE
   hi PreProc guifg=#dadada guibg=NONE gui=NONE cterm=NONE
   hi Special guifg=#dadada guibg=NONE gui=NONE cterm=NONE
@@ -190,7 +204,7 @@ else
   hi VisualNOS guifg=NONE guibg=#eeeeee gui=NONE cterm=NONE
   hi WarningMsg guifg=#000000 guibg=NONE gui=NONE cterm=NONE
   hi WildMenu guifg=#000000 guibg=#eeeeee gui=bold cterm=bold
-  hi Comment guifg=#000000 guibg=NONE gui=bold cterm=bold
+  hi Comment guifg=#000000 guibg=NONE gui=NONE cterm=NONE
   hi Constant guifg=#000000 guibg=NONE gui=NONE cterm=NONE
   hi Error guifg=#ff005f guibg=#000000 gui=bold,reverse cterm=bold,reverse
   hi Identifier guifg=#000000 guibg=NONE gui=NONE cterm=NONE
