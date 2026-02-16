@@ -120,7 +120,9 @@ vim.opt.softtabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
-vim.opt.hlsearch = false
+-- Set highlight on search, but clear on pressing <Esc> in normal mode
+vim.opt.hlsearch = true
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
@@ -195,7 +197,15 @@ vim.o.confirm = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 -- Diagnostic keymaps
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror message' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
+-- (Primagean precice za Quickfix List: ctrl+j = cnext, ctrl+k cprev)
+-- kada se sa telescope uradi grr i dobije lista svi mesta gde se neka func ili type pojavljuje onda se sa Ctrl+q ceo spisak ubaci u Quickfix list, iz koje moze da se odabere neko od tih mesta (bez da se opet ide na grr), a cak i kad se iz quick fix liste izadje sa :q ili sa :cclose (vraca se naza kao i na svaki splitovani prozor sa ctrl+p ili strl+hjkl) i dalje ostaje aktivna tako da moze da se ide na sledece i prethodne pojave iz spiska sa :cnext i :cprev s tim sto ta dva mogu da se mapiraju sa precicama (Primagean: ctrl+j = cnext, ctrl+k cprev) tako da se lakse ide kroz kod tj. spisak pojava func/type/var
+vim.keymap.set('n', '<C-j>', ':cnext<CR>', { desc = 'Down/next [j] in Quickfix list' })
+vim.keymap.set('n', '<C-k>', ':cprev<CR>', { desc = 'Up/prev [k] in Quickfix list' })
 
 -- da se ceo red ili blok pomera gore dole
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
@@ -229,9 +239,82 @@ end)
 
 -- da umesto 'default' theme bude uvek ukljucena 'quiet' tema
 -- negde na liniji 1002 je iskljucena tema tokyonight
+-- default quiet tema za nvim
+-- /usr/share/nvim/runtime/colors/quiet.vim
 -- ali na quiet se ne vidi lepo ni potpis func sa shift+k, ni aktivna func za koju sam dole podesio F2 a na default se vidi lepo, tako da mora da se vidi da se ili finije podesi shift+K F2 na quiet i to sam uradio tako sto sam napravio svoju novu temu quietv po uputstvu na https://neovim.io/doc/user/usr_06.html i dodao:
 --  hi NormalFloat guifg=#dadada guibg=NONE gui=NONE cterm=NONE i sada radi lepo a videcu sta jos mogu da podesim ako mi zatreba
-vim.cmd 'colorscheme quietv'
+--vim.cmd 'colorscheme quietv'
+--vim.cmd 'colorscheme default'
+-- izmene default ne idu a menjanje quiet takodje ne idu da se ovo desava (jer zuta za highlight uvek preboji highlight i tekst se tesko cita):
+-- what woud be the setting for this:
+-- text for keywords and variables are already automatically highlighted with some colors, when cursor is placed on some highlighted word:
+--- the backgruoud for that word and all other words turns grey
+--- cursor background gets the color of that word and characher on cursor becomes gray i.e. gets inversed colouring compared to higlighted wordkkk
+
+vim.api.nvim_set_hl(0, 'Comment', {
+  fg = '#8c886c',
+  bg = 'NONE',
+})
+
+--vim.api.nvim_set_hl(0, 'Function', {
+--  fg = '#029be0',
+--  bg = 'NONE',
+--  force = true,
+--})
+
+vim.api.nvim_set_hl(0, 'Title', {
+  fg = '#36b23f',
+  bg = 'NONE',
+})
+vim.api.nvim_set_hl(0, '@markup', {
+  fg = '#ffaf00',
+  bg = 'NONE',
+})
+
+vim.api.nvim_set_hl(0, 'TabLine', {
+  fg = '#8c886c',
+  bg = '#000000',
+  reverse = true,
+})
+vim.api.nvim_set_hl(0, 'TabLineFill', {
+  fg = '#dadada',
+  bg = 'NONE',
+})
+vim.api.nvim_set_hl(0, 'TabLineSel', {
+  fg = '#42c3fc',
+  bg = '#111110',
+})
+
+vim.api.nvim_set_hl(0, 'Constant', {
+  fg = '#dadada',
+  bg = 'NONE',
+  force = true,
+})
+vim.api.nvim_set_hl(0, 'String', {
+  fg = '#dadada',
+  bg = 'NONE',
+  force = true,
+})
+vim.api.nvim_set_hl(0, 'Identifier', {
+  fg = '#dadada',
+  bg = 'NONE',
+  force = true,
+})
+vim.api.nvim_set_hl(0, 'Special', {
+  fg = '#ffaf00',
+  bg = 'NONE',
+  force = true,
+})
+vim.api.nvim_set_hl(0, 'MatchParen', {
+  fg = '#ff00af',
+  bg = 'NONE',
+  force = true,
+  bold = true,
+})
+
+vim.api.nvim_set_hl(0, 'Keyword', {
+  bold = false,
+})
 
 -- treba i da se ne vide tabovi, da se ne vidi oznacena linija na kojoj je kursor
 -- Disable showing special characters (tabs/spaces)
@@ -290,7 +373,7 @@ vim.keymap.set({ 'n', 'v' }, '<leader>w', '<cmd>wa<cr><esc>', { desc = 'Save fil
 
 -- ovo je kao ctrl+f5 na kate i na notepad
 -- :map <F2> a<C-R>=strftime("%c")<CR><Esc>
--- iz nekog komplikovanog razloga nvim vidi F5 kao F5 ali Ctrl+F5 vidi kao F29:
+-- iz nekog komplikovanog razloga nvim vidi F5 kao F5 ali Ctrl+F5 vidi kao F29:init
 -- https://github.com/neovim/neovim/issues/7384
 -- %c daje lokalni datum tj. sa cirilicom pa sam nasao da za c/c++ funkciju strftime bolji izgled daju (%F %T)
 vim.keymap.set('n', '<F29>', 'a<C-R>=strftime("%F %T")<CR><Esc>', { desc = 'This appends the current date and time after the cursor' })
@@ -313,10 +396,10 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+--vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+--vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+--vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+--vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -337,6 +420,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     vim.hl.on_yank()
   end,
 })
+
+vim.lsp.config('ruff', {
+  init_options = {
+    settings = {
+      -- Ruff language server settings go here
+    },
+  },
+})
+
+vim.lsp.enable 'ruff'
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -549,13 +642,18 @@ require('lazy').setup({
         --   },
         -- },
         defaults = {
+          hidden = true,
+          no_ignore = true,
           file_ignore_patterns = {
             'node_modules',
-            '.git',
+            '.git/',
           },
         },
         pickers = {
-          find_files = { hidden = true },
+          find_files = {
+            hidden = true,
+            no_ignore = true,
+          },
         },
         extensions = {
           ['ui-select'] = {
@@ -821,6 +919,7 @@ require('lazy').setup({
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
+        ruff = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
