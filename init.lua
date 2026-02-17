@@ -301,7 +301,7 @@ vim.api.nvim_set_hl(0, 'Identifier', {
   force = true,
 })
 vim.api.nvim_set_hl(0, 'Special', {
-  fg = '#ffaf00',
+  fg = '#dadada',
   bg = 'NONE',
   force = true,
 })
@@ -314,6 +314,24 @@ vim.api.nvim_set_hl(0, 'MatchParen', {
 
 vim.api.nvim_set_hl(0, 'Keyword', {
   bold = false,
+})
+
+vim.api.nvim_set_hl(0, 'DiagnosticError', {
+  fg = '#ff005f',
+  bg = 'NONE',
+  force = true,
+})
+vim.api.nvim_set_hl(0, 'DiagnosticUnderlineError', {
+  fg = '#ff005f',
+  bg = 'NONE',
+  underline = true,
+  force = true,
+})
+
+vim.api.nvim_set_hl(0, 'Visual', {
+  fg = '#ffaf00',
+  bg = 'NONE',
+  force = true,
 })
 
 -- treba i da se ne vide tabovi, da se ne vidi oznacena linija na kojoj je kursor

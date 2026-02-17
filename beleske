@@ -434,4 +434,28 @@ v pa :w filename cuva obelezeni deo teksta u v rezimu kao novi fajl
 
 umesto sa ctrl+n/p moze da se ide kroz completition meni sa tab i shift+tab
 
+---
+
+
+vezbanje vim-a
+https://vim-racer.com/game-mode/randomized/
+razmisliti o nekoj drugoj kombinaciji za izlaz iz insert mode, slicno ovome (problem je sto sistem malo zastane kada se otkuca j da bi video da li ce biti jos jedno j ili nesto drugo):
+vim.keymap.set("i", "jj", "<Esc>")
+
+Ctrl+6 vraca na prethodni fajl u tom tabu/bufferu ili sta vec
+
+kada se sa telescope uradi grr i dobije lista svi mesta gde se neka func ili type pojavljuje onda se sa Ctrl+q ceo spisak ubaci u Quickfix list, iz koje moze da se odabere neko od tih mesta (bez da se opet ide na grr), a cak i kad se iz quick fix liste izadje sa :q ili sa :cclose (vraca se naza kao i na svaki splitovani prozor sa ctrl+p ili strl+hjkl) i dalje ostaje aktivna tako da moze da se ide na sledece i prethodne pojave iz spiska sa :cnext i :cprev s tim sto ta dva mogu da se mapiraju sa precicama (Primagean: ctrl+j = cnext, ctrl+k cprev) tako da se lakse ide kroz kod tj. spisak pojava func/type/var
+
+[<space> dodaje praznu liniju iznad kursora, ]<space> ispod kursora (spisak svih se dobija sa leader sk)
+
+kada se stoji na nekoj reci i pritisne * vim oznaci sve pojave te reci i skace se sa n/N i sa esc iskljucuje, i to se, za razliku od automatskog, zadrzava nakon ctrl+d/u kada se skroluje po pola ili celu stranu
+
+df<space> brise sve do prvog spejsa a tako mogu i ostale f pretrage da se koriste za d, a verovatno i za c i y
+
+plugin za neovim undotree koji daje pregled izmena u vidu tree kroz koji moze da se seta i vraca na prethodne verzije
+
+plugin Harpoon koji se pravi globalna bookmarks lista fajlova do kojih se stize lako nekom precicom i vezani su za projekat (mislim da slicno moze da se uradi i sa tabovima i precicom za tabove)
+
+
+
 
