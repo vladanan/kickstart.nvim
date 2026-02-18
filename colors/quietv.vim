@@ -1,3 +1,27 @@
+"-- da se oznace funkcije tanije plavom bojom i iskljucio redirekciju sa Functio na Identifier
+"--  hi Function guifg=#029be0 guibg=NONE gui=NONE cterm=NONE
+"
+"-- i da comment ne budu bold i da imaju umesto blago sive blago zuckastu boju
+"--  hi Comment guifg=#8c886c guibg=NONE gui=NONE cterm=NONE
+"
+"-- tabovi i Title+@makrup za .md fajlove:
+"--"hi TabLine guifg=#707070 guibg=#000000 gui=reverse cterm=reverse
+"--hi TabLine guifg=#8c886c guibg=#000000 gui=reverse cterm=reverse
+"--hi TabLineFill guifg=#dadada guibg=NONE gui=NONE cterm=NONE
+"--"hi TabLineSel guifg=#000000 guibg=#dadada gui=bold cterm=bold
+"--hi TabLineSel guifg=#00afff guibg=#111110 gui=NONE cterm=NONE
+"--hi Title guifg=#36b23f guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
+"--hi @markup guifg=#ffaf00 guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
+"
+"-- OVO MORA U colorscheme tokyo dole negde na 950 liniji jer kada se ovde podesi onda se tamo resetuje tako da ili da se uradi nakon teme ovako sistemski ili u okviru teme
+"-- Set the foreground color of inactive tabs to a dark gray
+"-- vim.api.nvim_set_hl(0, "TabLine", { fg = "#767676", bg = "#2c2e34", bold = false })
+"-- vim.api.nvim_set_hl(0, 'TabLine', { fg = '#b1a6f7', bg = '#111110', bold = false })
+"-- Set the foreground color of the active tab to a lighter color
+"-- vim.api.nvim_set_hl(0, "TabLineSel", { fg = "#ffffff", bg = "#2c2e34", bold = true })
+"-- Set the background color of the fill area
+"-- vim.api.nvim_set_hl(0, "TabLineFill", { bg = "#2c2e34" })
+
 " Name:         quietv
 " Description:  A mostly monochrome colorscheme, with a few niceties and
 " adjusted fro Vladan.
@@ -121,7 +145,8 @@ if &background ==# 'dark'
   hi Title guifg=#36b23f guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
   hi @markup guifg=#ffaf00 guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
   hi VertSplit guifg=#707070 guibg=#000000 gui=NONE cterm=NONE
-  hi Visual guifg=#ffaf00 guibg=#000000 gui=reverse cterm=reverse
+  "hi Visual guifg=#ffaf00 guibg=#000000 gui=reverse cterm=reverse
+  hi Visual guifg=#ffaf00 guibg=#000000 gui=NONE cterm=NONE
   hi VisualNOS guifg=NONE guibg=#303030 gui=NONE cterm=NONE
   hi WarningMsg guifg=#dadada guibg=NONE gui=NONE cterm=NONE
   hi NormalFloat guifg=#dadada guibg=NONE gui=NONE cterm=NONE

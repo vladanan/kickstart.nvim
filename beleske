@@ -551,8 +551,92 @@ ali i nakon ispravljenih gresaka nije sve radilo kako treba pa sam vratio na sta
 
 u glavnom repou su se nagomilali problemi i nema ko da  odrzava pa se sada pregovara da se nekome to dodeli koji je vec napravio fork i odrzava ga ali po modularnom principu
 
+vratio sam i moj fork repo na staro sa: git push -f
 
+---
 
+resenja da se resi sto se lua_ls zali na globalnu vim promenljivu nisu radila jer se oslanjaju na lspconfig modul a kickstart koristi drugi tj. neovim/nvim-lspconfig
+ionda sam ispod local servers iskopirao iz akutuelne kickstart verzije ovo i onda je proradilo:
 
+-- Special Lua Config, as recommended by neovim help docs
+ vim.lsp.config('lua_ls', {
+  on_init = function(client)
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then return end
+    end
+
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        version = 'LuaJIT',
+        path = { 'lua/?.lua', 'lua/?/init.lua' },
+      },
+      workspace = {
+        checkThirdParty = false,
+        -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
+        --  See https://github.com/neovim/nvim-lspconfig/issues/3189
+        library = vim.api.nvim_get_runtime_file('', true),
+      },
+    })
+  end,
+  settings = {
+    Lua = {},
+  },
+ })
+
+sada da probamo da se moje options i keymaps stave u zaseban fajl nezavisan od kickstart dzinovskog init.lua i da mogu da se koriste i u drugim kickstart modularnim repoima
+
+i stavicu redirekciju ka svojim pre ovog dela u init.lua:
+-- [[ Configure and install plugins ]]
+
+moji pluginovi i podesavanja moraju da ostanu a narocito ovi jer rade a u glavnom je mnogo izmena:
+- iskljucena 'folke/tokyonight.nvim' tema
+- providni vim:
+  {
+    'xiyaowong/transparent.nvim',
+    lazy = false,
+    config = function()
+      require('transparent').setup {
+        -- Optional: Customize transparency settings
+        groups = { -- table: groups to make transparent
+          'Normal',
+          'NormalFloat',
+          'FloatBorder',
+          'TelescopeBorder',
+          'TelescopeNormal',
+        },
+        -- Or, set default groups (see #20)
+        default_groups = true,
+      }
+    end,
+  },
+- Special Lua Config
+- treesiter:
+  { -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    opts = {
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      -- Autoinstall languages that are not installed
+      auto_install = true,
+      highlight = {
+        enable = true,
+        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+        --  If you are experiencing weird indenting issues, add the language to
+        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+        additional_vim_regex_highlighting = { 'ruby' },
+      },
+      indent = { enable = true, disable = { 'ruby' } },
+    },
+
+potpuno modularni kickstart ali se izgleda vise ne odrzava:
+https://github.com/dam9000/kickstart-modular.nvim
+
+njegov fork koji je cini mi se identican kickstartu osim nekih bugfix i izgleda da ce autor da bude novi maintainer za kickstart:
+https://github.com/oriori1703/kickstart-modular.nvim
+
+za sada drzim svoj mini modularni setup i cekam da vidim sta ce da se desi sa glavnim kickstart reopoom
 
 
