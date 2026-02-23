@@ -1,0 +1,300 @@
+2024-10-10 07:57:50
+
+:help start-of-file
+
+:help motion — explains all the movement commands.
+
+:help navigation — broader overview.
+
+:help key-notation — if you're confused by the symbols like <C-w> or <S-CR>.
+
+Use Ctrl-] to jump to a tag/link in help.
+
+Use Ctrl-o to go back in help, like a browser history.
+
+This cycles through the open windows.
+    Ctrl + w, then w again
+
+Ctrl-w h → move to the window left
+
+Ctrl-w l → move right
+
+Ctrl-w k → move up
+
+Ctrl-w j → move down
+
+
+:e file.txt — open new file
+
+:ls — see open files
+
+:b 2 — switch to buffer #2
+
+Ctrl-^ — toggle between two most recent files
+
+Use :sp or :vs for side-by-side editing
+
+
+-- See `:help telescope.builtin`
+local builtin = require 'telescope.builtin'
+vim.keymap.set('n', '<leader>ff', vim.cmd.Ex)
+vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
+vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
+vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
+vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
+vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
+vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
+vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+
+---
+
+kopiranje yankovanog teksta u telescope find:
+Ctrl+r i dobija se spisak registera/bufera sa kopiranim tekstom i ostalim stvarima kao sto je poslednja komanda ili ime fajla u drugom bufferu itd., 0 je poslednji yank
+
+tako da se to moze sa Ctrl+r 0
+
+---
+
+find & replace za ceo projekat tj. sve fajlove u folderu
+
+prvo space sg za live_grep
+zatim se upise ono sto se trazi i kada se spisak sredi
+Ctrl+q da se ubaci u Quickfix list
+
+Once the results are in the Quickfix list, use the cfdo command to execute a substitution command on each file listed in the Quickfix list.
+The command structure is: cfdo %s/<old-string>/<new-string>/g | update | bd
+
+    cfdo: Executes the following command on each file in the Quickfix list.
+
+%s/<old-string>/<new-string>/g: This is the standard Vim substitution command.
+
+    %: Applies the substitution to the entire file.
+
+s: Indicates a substitution.
+<old-string>: The string or pattern to find.
+<new-string>: The string to replace it with.
+g: (Global) Replaces all occurrences within each line.
+
+| update: Saves the changes to the file after the substitution.
+| bd: da se pobrisu bafferi da se sistem ne opterecuje jer moze biti mnogo fajlova
+
+mozda ce da javi gresku sa treesiter ali ne obracati paznju i pregledati fajlove
+
+---
+
+nalazenje nvim konfiguracionih fajlova, zgodno za ove beleske i init.lua:
+
+Space tj. leader sn
+
+leader leader daje spisak otvorenih buffera
+
+---
+
+iz telescope se sa Ctrl+v otvara obelezeni fajl kao vertical split
+
+---
+
+u v rezimu sa Shift j/k tj. J K obelezeni red ili blok ide gore dole
+
+---
+
+za pregled greske lsp-a u nvim <leader>ca
+
+---
+
+copiranje fajla u netrw:
+
+prvo se obelezi target folder: ode se na . u vrhu spiska i pritisne mt
+zatim se obelezi fajl za kopiranje: ode se na sam fajl i pritisne mf
+zatim se uradi kopiranje sa: mc
+onda netrw pita za ime novog fajla i kada se upise onda se potvrdi sa y
+
+----
+
+kada se nalazis iznad neke funkcije sa grr se ide na definiciju, referencu, implementaciju
+
+iznad neke promenljive sa: grn se dobija meni da se ta promenljiva preimenuje svuda kao u vsc, ODNOSI SE I NA DRUGE FAJLOVE
+
+---
+
+kada se pritisne slovo neke komande i saceka dobija se meni (which-key plugin) sa svim opcijama a na kraju koliko jos opcija ima sa dodatnim slovima u komandi
+i to vazi za sve komande:
+
+y = copy
+d = cut/delete
+c = change
+g = go
+z = fold
+
+---
+
+:wa save all
+
+. ponavlja poslednju komandu tipa dd i slicno tj. ponavlja sve sto je uradjeno u insert modu
+
+ovo moze da se koristi da se sa find (ili obrnuti find koji se dobija sa shift / tj. ?) menja nesto uzatopno tako sto se nesto nadje sa n i uradi ista promena sa .
+
+---
+
+zz centrira tekst oko aktivnog kursora tako da bude kursor na sredini ekrana
+
+---
+
+0 ide bukvalno na pocetak linije a ^ shift+6 ide na prvo slovo linije
+
+f + slovo ide na to slovo ; ponavlja zadnju potragu a , ponavlja unazad
+
+== poravnjava tekucu liniju sa onom iznad nje
+
+R daje replace mode tako da prepisuje sve redom
+
+diw brise celu rec dok dw brise od pozicije kursora do kraja reci, umesto w moze da bude i " za sve izmedju navodnika ili { za sve izmedju zagrade tj. sve u funkciji ili p za ceo paragraf ili f aktuelni granicnik
+
+isto to vazi i za y tj. vec korisceno yiw itd. a vazi i za a umesto i gde se brise okvir w"{ i oznaka okvira
+
+---
+
+alt+ jklh b cini da se izadje iz insert moda, isto i ctrl+c, tako da nema potrebe da se radi remaping za esc/caps/jj/jk ctrl+[ itd.
+
+https://vim.fandom.com/wiki/Avoid_the_escape_key
+Avoiding the Esc key
+If you have an American English keyboard, pressing Ctrl-[ (control plus left square bracket) is equivalent to pressing Esc. This provides an easy way to exit from insert mode.
+
+Use Alt/Meta In a Terminal
+Alt keys appear on most PC keyboards. Meta keys were used on some old systems.
+
+If you use Vim in a terminal, simply press alt/meta+normal_mode_key. Most terminals send an escape character followed by the normal_mode_key that you pressed, removing the need to press escape yourself.
+
+The terminals konsole and gnome terminal send the escape by default when you press alt/meta+normal_mode_key.
+Thus in insert mode pressing alt+h alt+j alt+k alt+l all take you to normal mode and move in the expected direction. You can hold down alt when moving even while in normal mode since the additional ESC that is sent does no harm.
+
+The advantage of using this scheme is that you can use the alt/meta+key combination with any normal mode key, e.g.
+
+Alt+o opens a new line below the one you are currently editing,
+Alt+A appends to the end of the current line,
+Alt+p pastes at the current insert location.
+Alt+k moves up
+Thus using vim via a terminal gives you these short cut powers on any stock standard system without the need to edit each systems vim mappings.
+
+---
+
+only delete not copy with d etc and cut with Ctrl + x ?
+
+https://vi.stackexchange.com/questions/25474/stop-the-normal-mode-delete-commands-from-copying-text
+https://stackoverflow.com/questions/11993851/how-to-delete-not-cut-in-vim
+
+:reg dobija se spisag registara, isto se dobija i sa "
+na "* je register iz spoljnih aplikacija, "0 je yanked, "" je default tj. zadnji koriscen
+
+Use the "black hole register", "_ to really delete something: "_d
+ova komanda ne kopira nista u neki register
+
+na ovaj nacin se izbegavaju remapiranja a osim toga se sa svakim remapiranjem gubi funkcija necega drugog
+
+primer remapiranja:
+For Neovim users, add that to your init.lua:
+-- Prevent deleting from also copying
+vim.keymap.set({'n', 'v'}, 'd', '"_d', { noremap = true })
+vim.keymap.set('n', 'dd', '"_dd', { noremap = true })
+
+---
+
+ovo preskacem za sada da vidim da li mogu da ostanem na :
+
+Space + ;  =  : (command mode)
+avoiding irritations from accidental use of CapsLock: 
+CapsLock = : (command mode)?
+CapsLock + CapsLock = CapsLock?
+
+---
+
+gj - move cursor down (multi-line text)
+gk - move cursor up (multi-line text) 
+
+---
+
+2025-08-03 13:20:57
+
+vimtutor
+vim tutor
+
+333gg ide na liniju 413
+
+zapamti da su a i p analogni jer ubacuju nakon kursora, a P i i jer ubacuju ispred kurora
+
+% nalazi uparene zagrade ([{
+
+:%s/staro/novo/gc
+
+% kaze da se gleda ceo fajl
+g kaze da se gleda cela linija
+c trazi potvrdu pre zamene
+
+:w filename.ext cuva aktuelni fajl pod drugim imenom tj. radi copy
+
+v pa :w filename cuva obelezeni deo teksta u v rezimu kao novi fajl
+
+:r filename ubacuje fajl ispod kursora
+:r !ls ubacuje ls output ispod kursora
+
+umesto sa ctrl+n/p moze da se ide kroz completition meni sa tab i shift+tab
+
+---
+
+vezbanje vim-a
+https://vim-racer.com/game-mode/randomized/
+
+---
+
+razmisliti o nekoj drugoj kombinaciji za izlaz iz insert mode, slicno ovome (problem je sto sistem malo zastane kada se otkuca j da bi video da li ce biti jos jedno j ili nesto drugo):
+vim.keymap.set("i", "jj", "<Esc>")
+
+---
+
+Ctrl+6 vraca na prethodni fajl u tom tabu/bufferu ili sta vec
+
+---
+
+kada se sa telescope uradi grr i dobije lista svi mesta gde se neka func ili type pojavljuje onda se sa Ctrl+q ceo spisak ubaci u Quickfix list, iz koje moze da se odabere neko od tih mesta (bez da se opet ide na grr), a cak i kad se iz quick fix liste izadje sa :q ili sa :cclose (vraca se naza kao i na svaki splitovani prozor sa ctrl+p ili strl+hjkl) i dalje ostaje aktivna tako da moze da se ide na sledece i prethodne pojave iz spiska sa :cnext i :cprev s tim sto ta dva mogu da se mapiraju sa precicama (Primagean: ctrl+j = cnext, ctrl+k cprev) tako da se lakse ide kroz kod tj. spisak pojava func/type/var
+
+---
+
+[<space> dodaje praznu liniju iznad kursora, ]<space> ispod kursora (spisak svih se dobija sa leader sk)
+
+---
+
+kada se stoji na nekoj reci i pritisne * vim oznaci sve pojave te reci i skace se sa n/N i sa esc iskljucuje, i to se, za razliku od automatskog, zadrzava nakon ctrl+d/u kada se skroluje po pola ili celu stranu
+
+---
+
+df<space> brise sve do prvog spejsa a tako mogu i ostale f pretrage da se koriste za d, a verovatno i za c i y
+
+---
+
+iz drugih fajlova od ranije:
+
+nvim redo:
+ctrl+r
+
+find & replace:
+:6,10s/foo/bar/gc
+
+jump na prethodni code edit:
+ctrl+o
+sledeci edit:
+ctrl+i
+moze i: g, g;
+
+---
+
+za trenutnu sesiju da se ukljuci highlight za search pogotke:
+:set hlsearch
+i da se iskljuci:
+:nohlsearch
+
+---
+
+

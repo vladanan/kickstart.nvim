@@ -2,4 +2,23 @@
 --  I promise not to create any merge conflicts in this directory :)
 --
 -- See the kickstart.nvim README for more information
-return {}
+return {
+  {
+    'xiyaowong/transparent.nvim',
+    lazy = false,
+    config = function()
+      require('transparent').setup {
+        -- Optional: Customize transparency settings
+        groups = { -- table: groups to make transparent
+          'Normal',
+          'NormalFloat',
+          'FloatBorder',
+          'TelescopeBorder',
+          'TelescopeNormal',
+        },
+        -- Or, set default groups (see #20)
+        default_groups = true,
+      }
+    end,
+  },
+}
