@@ -419,7 +419,7 @@ sa :125 ide se na liniju 125 isto kao i sa 125gg
 
 https://www.youtube.com/watch?v=FrMRyXtiJkc
 primagean demonstrira neovim:
-  - videti da li moze pored grr i ostalih za lsp da ima i vca tj. 
+  - demonstrira i ono sto ima u kickstart: lsp da ima i vca tj. gra: 
 vim keymap set "n", “<leader>vca", function’) vim.lsp.buf.code_action() end, opts
 i to onda automatski ispravlja gresku u kodu nesto kao fast fix u vsc
   - ima pluging context koji prikazuje u vrhu pocetnu liniju func i tako pokazuje gde si (kao u vsc)

@@ -227,11 +227,29 @@ zapamti da su a i p analogni jer ubacuju nakon kursora, a P i i jer ubacuju ispr
 
 % nalazi uparene zagrade ([{
 
+---
+
 :%s/staro/novo/gc
 
 % kaze da se gleda ceo fajl
 g kaze da se gleda cela linija
 c trazi potvrdu pre zamene
+
+Method 1: Using the Search and Substitute Commands (Most Flexible)
+    Yank the text you want to search for. For example, move your cursor to a word and type yiw (yank inner word). This places the word in the default (unnamed) register "" and register 0.
+    Start the substitute command. Type :%s/ to begin a search and replace across the entire file. The command line will look like :%s//.
+    Paste the yanked text. While still on the command line, press <C-r>" (Ctrl+R followed by the double-quote character) to paste the contents of the unnamed register into the search pattern area.
+        Alternatively, to avoid overwriting your unnamed register with future deletions, use <C-r>0 to paste the contents of the numbered register 0, which only stores yanked text.
+    Add the replacement string and flags. Type a closing /, the new replacement text, and then optionally add flags like g (global replacement in each line) and c (ask for confirmation).
+        The full command will look something like :%s/yanked_text/replacement_text/gc.
+
+Method 2: Using Visual Mode and the Search Register
+    Visually select the text. Press v, move your cursor to highlight the desired text, then press y to yank it.
+    Start a search (optional). Type / and then immediately press <C-r>" to paste the yanked text into the search prompt. Press <Enter> to see the first match.
+    Perform the substitute. After a search is performed, the search pattern is stored in the search register. You can now run a substitute command without specifying the pattern, and it will automatically use the last searched pattern.
+        Type :%s//replacement_text/g and press <Enter>.
+
+---
 
 :w filename.ext cuva aktuelni fajl pod drugim imenom tj. radi copy
 

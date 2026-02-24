@@ -137,7 +137,7 @@ if &background ==# 'dark'
   hi StatusLine guifg=#000000 guibg=#dadada gui=bold cterm=bold
   hi StatusLineNC guifg=#707070 guibg=#000000 gui=reverse cterm=reverse
   "hi TabLine guifg=#707070 guibg=#000000 gui=reverse cterm=reverse
-  hi TabLine guifg=#8c886c guibg=#000000 gui=reverse cterm=reverse
+  hi TabLine guifg=#858056 guibg=#000000 gui=reverse cterm=reverse
   hi TabLineFill guifg=#dadada guibg=NONE gui=NONE cterm=NONE
   "hi TabLineSel guifg=#000000 guibg=#dadada gui=bold cterm=bold
   hi TabLineSel guifg=#42c3fc guibg=#111110 gui=NONE cterm=NONE

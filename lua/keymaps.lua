@@ -20,6 +20,7 @@ vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
 -- da pokaze u komandoj liniji ime func u kojoj se nalazi kursor
+-- pokazuje isto sto i nvim-treesitter/nvim-treesitter-context plugin koji je instaliran u ../lua/custom/plugins/init.lua
 --vim.keymap.set('n', '<F2>', function()
 --  local line = vim.fn.search([[^\s*func\s\+]], 'bWn')
 --  if line > 0 then
@@ -72,3 +73,11 @@ vim.keymap.set({ 'n', 'v' }, '<leader>w', '<cmd>wa<cr><esc>', { desc = 'Save fil
 -- https://github.com/neovim/neovim/issues/7384
 -- %c daje lokalni datum tj. sa cirilicom pa sam nasao da za c/c++ funkciju strftime bolji izgled daju (%F %T)
 vim.keymap.set('n', '<F29>', 'a<C-R>=strftime("%F %T")<CR><Esc>', { desc = 'This appends the current date and time after the cursor' })
+
+-- niz komandi za search and replace
+vim.keymap.set('v', '<leader>y', 'y:%s/<C-r>"/', { desc = '[Yank], search and replace on selected text in visual mode' })
+
+-- da se kursor popne na def func uz pomoc nvim-treesitter/nvim-treesitter-context plugin koji je instaliran u ../lua/custom/plugins/init.lua
+vim.keymap.set('n', '[c', function()
+  require('treesitter-context').go_to_context(vim.v.count1)
+end, { silent = true })
