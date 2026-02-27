@@ -315,4 +315,86 @@ i da se iskljuci:
 
 ---
 
+brisanje cele func
+
+da se ode na pocetak func recimo sa: ?func ili /func
+
+zatim visual i kraj reda tj. do otvorene { sa: v$
+i onda matching bracket } sa: %
+i brisanje sa: d
+
+ili sa brojanjem linija: 23dd
+s tim sto ovo ne brise i tu 23. liniju tako da mora da se stavi 24 tako da ode jos liniju dalje
+i ovo ne moze da se koristi kada je func veca od ekrana i ne vidi se na kojoj liniji joj je kraj
+
+ili za d moze pokret da bude i search:
+d/^}
+brisi sav text dok ne nadjes da je prvi non-space string u liniji }
+s tim sto ni ovo ne brise i tu liniju u kojoj je taj tekst na pocetku linije tako da mora da se doda takav tekst za pretragu koji ce da ode jos liniju dalje
+
+a ako je kursor na poslednjoj liniji sa } sa: V%
+
+---
+
+foldovanje func i ostalog
+
+po defaultu je manual tj. sa V se odabere sekcija i onda kreira fold sa zf
+i onda se taj deo vidi sivo kao komentar sa prvom linijom func, otvara se sa zo, a zatvara sa zc
+fold (oznaka za fold a ne sam tekst) se brise sa: zd
+
+yankovanjem te linije ili sa d se brise ceo fold
+
+pored manual ima i :set foldmethod=indent ili :set foldmethod=syntax
+
+sa :set foldmethod=indent odmah je sve foldovao tako da se prve linije func vide a kao komentar je ono sto je unutar func
+i to unutar func se raspakuje po nivoima indenta tako da se i odmotavanje radi slojevito osim sa
+prilikom pretrage odmotava foldove tamo gde je nasao pogodak
+
+sa :set foldmethod=syntax ne radi
+
+---
+
+gitsign opcije
+
+pokazuje ispred brojeva linija znake za git promene, kao i u statusnoj liniji, ali moze da pokaze i spisak promena:
+
+Set the quickfix/location list with changes with :Gitsign setqflist/setloclist.
+pokazuje u quickfix spisak git promena sa opisom, super stvar
+
+---
+
+copy/cut/paste ili yank/delete/paste/system
+
+na " se vide svi registri
+
+ako se yank/cut neka linija to ide u 4 registra: " last yank/delete, + system, - small delete
+ali ako se posle toga izbrise/izmeni nesto manje od linije to ide samo u - a ne ostale
+yank ide u 0 i " i +
+yankovi se cuvaju redom od 0-9 kao stack recimo
+registri sa slovima a, x, w mogu slobodno da se dodeljuju
+* je za stvari koje su selektovane i kopiranje na sistemu
+
+rade i : expression, / last search, #% current and alternate file itd.
+
+mogu registri da se ubacuju i u search/replace komande:
+
+:%s/<C-r>a/<C-r>b/g
+
+ali mora da se obrati paznja na slashes:
+
+Slashes can be handled by using a different separator for the substitute command (e.g., * or # instead of /). Example: :%s*<C-r>a*replacement*g
+
+---
+
+yj selektuje aktuelnu i donju liniju, mnogo bolje nego shift-v j y
+
+---
+
+ubacio sam multi grep func/plugin/picker za telescope tako da umesto da se grepuje jedna rec u projektu moze da radi sa dve: odvojene sa dva space i tako brze suzava izbor u velikim projektima
+https://www.youtube.com/watch?v=xdXE1tOT-qg
+vim.keymap.set('n', '<leader>sm', live_multigrep)
+
+---
+
+
 

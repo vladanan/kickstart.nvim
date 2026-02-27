@@ -448,4 +448,18 @@ dodao u treesitter podesavanje:         'python',
 
 ---
 
+-- niz komandi za yank, search and replace
+
+[c da se kursor popne na def func uz pomoc nvim-treesitter/nvim-treesitter-context plugin koji je instaliran u ../lua/custom/plugins/init.lua
+
+---
+
+dodati keymaps za komentovanje i uncomentovanje paragrafa i func/{}block i selection
+
+---
+
+
+
+
+
 

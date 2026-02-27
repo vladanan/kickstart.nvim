@@ -139,3 +139,16 @@ vim.lsp.config('ruff', {
 })
 
 vim.lsp.enable 'ruff'
+
+-- daje string za komentar za jezik u kome se radi slicno kao sto se dobija preko komande :set commentstring?
+function _G.GetComment()
+  local cs = vim.bo.commentstring
+  if not cs or cs == '' then
+    return ''
+  end
+
+  local prefix = cs:match '^(.*)%%s' or cs
+  prefix = prefix:gsub('%s+$', '') .. ' '
+
+  return prefix
+end

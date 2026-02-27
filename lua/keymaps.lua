@@ -55,8 +55,8 @@ end)
 --vim.keymap.set('n', '<C-Tab>', 'gt', { desc = 'Go to next tab' })
 -- ovo dole ne radi iako je tmux podesen kako treba pa sam prebacio na leader varijante
 --vim.keymap.set('n', '<C-S-Tab>', 'gT', { desc = 'Go to next tab' })
-vim.keymap.set('n', '<leader>h', 'gT', { desc = 'Go to previous tab' })
-vim.keymap.set('n', '<leader>l', 'gt', { desc = 'Go to previous tab' })
+vim.keymap.set('n', '<leader>h', 'gT', { desc = '[G]o to previous [T]ab' })
+vim.keymap.set('n', '<leader>l', 'gt', { desc = '[G]o to previous [T]ab' })
 
 -- precica za init.lua ali ne treba jer se spisak conf fajlova za nvim dobijaju sa <leader>sn
 --vim.api.nvim_set_keymap('n', '<leader>si', ':tabnew /home/vladan/.config/nvim/init.lua<CR>', { noremap = true, silent = true })
@@ -65,7 +65,7 @@ vim.api.nvim_set_keymap('n', '<leader>sb', ':tabnew ../beleske-esim.md<CR>', { n
 
 -- da se svi fajlovi cuvaju sa leader w umesto :wa ali ovo usporava kucanje?
 --vim.keymap.set({ 'i', 'x', 'n', 's', 'v' }, '<leader>w', '<cmd>wa<cr><esc>', { desc = 'Save file' })
-vim.keymap.set({ 'n', 'v' }, '<leader>w', '<cmd>wa<cr><esc>', { desc = 'Save file' })
+vim.keymap.set({ 'n', 'v' }, '<leader>w', '<cmd>wa<cr><esc>', { desc = 'Save all files' })
 
 -- ovo je kao ctrl+f5 na kate i na notepad
 -- :map <F2> a<C-R>=strftime("%c")<CR><Esc>
@@ -74,10 +74,22 @@ vim.keymap.set({ 'n', 'v' }, '<leader>w', '<cmd>wa<cr><esc>', { desc = 'Save fil
 -- %c daje lokalni datum tj. sa cirilicom pa sam nasao da za c/c++ funkciju strftime bolji izgled daju (%F %T)
 vim.keymap.set('n', '<F29>', 'a<C-R>=strftime("%F %T")<CR><Esc>', { desc = 'This appends the current date and time after the cursor' })
 
--- niz komandi za search and replace
-vim.keymap.set('v', '<leader>y', 'y:%s/<C-r>"/', { desc = '[Yank], search and replace on selected text in visual mode' })
+-- niz komandi za yank, search and replace
+vim.keymap.set('v', '<leader>y', 'y:%s/<C-r>"/', { desc = '[Y]ank, search and replace on selected text in visual mode' })
 
--- da se kursor popne na def func uz pomoc nvim-treesitter/nvim-treesitter-context plugin koji je instaliran u ../lua/custom/plugins/init.lua
-vim.keymap.set('n', '[c', function()
-  require('treesitter-context').go_to_context(vim.v.count1)
-end, { silent = true })
+-- -- da se kursor popne na def func uz pomoc nvim-treesitter/nvim-treesitter-context plugin koji je instaliran u ../lua/custom/plugins/init.lua
+-- -- smeta za git diff ]c - jump to start of next change, [c - jump to start of previous change
+-- vim.keymap.set('n', '[c', function()
+--   require('treesitter-context').go_to_context(vim.v.count1)
+-- end, { silent = true })
+
+-- niz komandi za comment i uncomment paragraph, za selection, func i {} blok je lakse sa: ctrl+v + $% ili 23kj
+-- stara verzija koja pravi komentare samo za Go: vim.keymap.set('n', '<leader>cp', '{j^<C-v>}kI//<esc>', { desc = '[C]omment: [p]aragraph for Go' })
+vim.keymap.set('n', '<leader>cp', '{j^<C-v>}kI<C-r>=luaeval("GetComment()")<CR><esc>', { desc = '[C]omment: [p]aragraph' })
+vim.keymap.set('n', '<leader>cd', '{j^<C-v>}k^lx', { desc = '[C]omment: [d]elete for whole paragraph (// or -- etc.)' })
+
+-- -- komande za pocetak i nastavak selekcije funkcije ili bloka i stavljanja komentara na ono sto je selektovano
+vim.keymap.set('n', '<leader>cs', '^<C-v>$%', { desc = '[C]omment: [S]elect function or select and keep selecting {} block for [c]omment [c]ommand' })
+vim.keymap.set('v', '<leader>cs', '^$%', { desc = '[C]omment: continue [S]electing {} block for [c]omment [c]ommand' })
+-- stara verzija koja pravi komentare samo za Go: vim.keymap.set({ 'n', 'v' }, '<leader>cc', 'I//<esc>', { desc = '[C]omment: [c]ommand for funcion or {} block or selecion for Go' })
+vim.keymap.set({ 'n', 'v' }, '<leader>cc', 'I<C-r>=luaeval("GetComment()")<CR><esc>', { desc = '[C]omment: [c]ommand for funcion or {} block or selecion' })
