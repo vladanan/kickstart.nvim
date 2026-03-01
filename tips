@@ -394,7 +394,73 @@ ubacio sam multi grep func/plugin/picker za telescope tako da umesto da se grepu
 https://www.youtube.com/watch?v=xdXE1tOT-qg
 vim.keymap.set('n', '<leader>sm', live_multigrep)
 
+---izmenjeno
+
+videti kako da se u vec otvorenom nvim pokrene diff rezim za dva fajla
+
+To begin diffing on all visible windows:
+:windo diffthis
+which executes :diffthis on each window.
+To end diff mode:
+:diffoff!
+(The ! makes diffoff apply to all windows of the current tab - it'd be nice if diffthis had the same feature, but it doesn't.)
+or :windo diffoff
+
+NE-KOMITOVANE PROMENE U TRENUTNOM FAJLU/BUFERU
+
+The most streamlined method is using the popular Fugitive plugin.
+
+uz pomoc gpt dobio ovu komandu koja radi sta treba, druga pokazuje git verziju i kao RO sto je jos bolje:
+stavio sam je kao <leader>dg
+:let root = systemlist('git rev-parse --show-toplevel')[0] | let file = substitute(expand('%:p'), root . '/', '', '') | vert new | set bt=nofile bh=wipe noswapfile | execute 'read !git show HEAD:' . file | 0delete | diffthis | wincmd p | diffthis
+:let root = systemlist('git rev-parse --show-toplevel')[0] | let file = substitute(expand('%:p'), root . '/', '', '') | vert new | set bt=nofile bh=wipe noswapfile nobuflisted | execute 'read !git show HEAD:' . file | 0delete | setlocal nomodifiable readonly | diffthis | wincmd p | diffthis
+
+
+PROMENE TRENUTNIH NESACUVANIH EDITA U ODNOSU NA FAJL NA DISKU (DAKLE NEMA VEZE SA POSLEDNJIM GIT COMMIT)
+
+mogu da se vide jednostavne diff promene preko diff komande:
+:w !diff % -
+ali je nezgodno za vece izmene jer sve ide u statusnu liniju koja se penje gore ka sredini ekrana
+ili sa vise detalja preko git:
+:w !git diff --no-index -- % -
+isto samo za manje izmene jer jos i vise mesta zauzima u statusnoj liniji
+
+ali nijedna nije kao diffthis rezim mada mozda moze nesto slicno preko programa vimdiff:
+:w !vimdiff % /dev/stdin
+ali on ne ide uz vim minimal koji mi je instaliran na fedori nego mora da se instalira vim-enhanced paket da se dobije i vimdiff
+
+problem je sto u nvim a izgleda i u vim kada se sa vsplit otvara isti fajl on otvara u stvari buffer dok se sa komandama za diff i git salje sadrzaj buffera i da otvore sam fajl na disku
+to verovatno znaci da bi se sa vimdiff otvorila zasebna instanca vimdiffa a ne da se stvar radi u vec otvorenom nvim/vim
+dakle za tako nesto bi bio dobar undotree plugin o kojem je pricao primagean
+
+gpt napravio i to i stavio sam precicu:
+<leader>ds
+:execute 'vert new | set bt=nofile bh=wipe noswapfile nobuflisted | execute "read !cat ' . expand('%:p') . '" | 0delete | setlocal nomodifiable readonly | diffthis | wincmd p | diffthis'
+
 ---
 
+probati da se makar ctrl u kombinacijama sa w, q, d, t zameni sa recimo backspace koji u n rezimu nema nikakvu fuknciju i radi kao i left strelica DODATAK
+ovo ne moze jer vim nvim ne dozvoljavaju mapiranje samog ctrl nego samo u kombinaciji sa drugim tasterima
+vim.keymap.set('n', '<BS>', '<C>', { desc = 'Map Backspace to Ctrl for window and other commands' })
 
+ovo radi i fino sluzi za v, w, q, s, n sa split windows kao sto je obican split ili diff split
+vim.keymap.set('n', '<BS>', '<C-w>', { desc = 'Map Backspace to Ctrl-W for window commands' })
+
+---
+
+vezbanje sa makroima
+
+a$aaaaajedan jos neke reci za ubacivanje da cujemo kako ce i to da radi
+aaadma jos neke reci za ubacivanje da cujemo kako ce i to da radi
+aaatri jos neke reci za ubacivanje da cujemo kako ce i to da radi
+aaacetiri jos neke reci za ubacivanje da cujemo kako ce i to da radi
+aaapet jos neke reci za ubacivanje da cujemo kako ce i to da radi
+
+jos malo kucao
+
+---
+
+da se vidi ako moze kickstart u smanjenoj verziji da radi na ubuntu 22 na esim vps za root
+lazy, blink, lsp traze nvim bar 0.10 a na ubuntu 22 je 0.9 ali ako se iz init.lua pobrise sve osim keybindings u posebnoj branch onda bi bar to trebalo da radi
+prvo da se push nvim sa dev na github, zatim na ubuntu izbrise .config/nvim i .local/nvim, clonira repo, pobrise sve iz init.lua itd. oko pluginova i proba da rade samo options i keymaps
 

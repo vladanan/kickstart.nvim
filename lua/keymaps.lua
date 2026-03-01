@@ -93,3 +93,28 @@ vim.keymap.set('n', '<leader>cs', '^<C-v>$%', { desc = '[C]omment: [S]elect func
 vim.keymap.set('v', '<leader>cs', '^$%', { desc = '[C]omment: continue [S]electing {} block for [c]omment [c]ommand' })
 -- stara verzija koja pravi komentare samo za Go: vim.keymap.set({ 'n', 'v' }, '<leader>cc', 'I//<esc>', { desc = '[C]omment: [c]ommand for funcion or {} block or selecion for Go' })
 vim.keymap.set({ 'n', 'v' }, '<leader>cc', 'I<C-r>=luaeval("GetComment()")<CR><esc>', { desc = '[C]omment: [c]ommand for funcion or {} block or selecion' })
+
+-- pokazuje diff izmedju aktivnog izmenjenog ali ne commit-ovanog fajla i stanja fajla iz poslednjeg commit-a
+vim.keymap.set('n', '<leader>dg', function()
+  local r = vim.fn.systemlist('git rev-parse --show-toplevel')[1]
+  local f = vim.fn.expand('%:p'):gsub('^' .. r .. '/', '')
+  vim.cmd(
+    ('vert new | set bt=nofile bh=wipe noswapfile nobuflisted | execute "read !git show HEAD:%s" | 0delete | setlocal nomodifiable readonly | diffthis | wincmd p | diffthis'):format(
+      f
+    )
+  )
+end, { desc = '[D]iff current file vs [g]it HEAD' })
+
+-- pokazuje diff nesacovanih razlika u fajklu u bufferu u odnosu na verziju koja je na disku, dakle, nevezano za git commit
+vim.keymap.set('n', '<leader>ds', function()
+  local f = vim.fn.expand '%:p'
+  vim.cmd(
+    ('vert new | set bt=nofile bh=wipe noswapfile nobuflisted | execute "read !cat %s" | 0delete | setlocal nomodifiable readonly | diffthis | wincmd p | diffthis'):format(
+      f
+    )
+  )
+end, { desc = '[D]iff buffer vs [s]aved file' })
+
+-- da se za window za levu stranu tastature koristi umesto levog ctrl backspace jer nemam na ovoj tastaturi desni ctrl
+-- ne moze da se sam ctrl mapira na backspace jer to vim ne dozvoljava, samo kombinacije nesto za tastera sa ctrl
+vim.keymap.set('n', '<BS>', '<C-w>', { desc = 'Map Backspace to Ctrl+w for (split) window commands' })
