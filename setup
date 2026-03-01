@@ -458,6 +458,15 @@ dodati keymaps za komentovanje i uncomentovanje paragrafa i func/{}block i selec
 
 ---
 
+da se vidi ako moze kickstart u smanjenoj verziji da radi na ubuntu 24 na esim vps za root
+
+lazydev, blink, lsp traze nvim bar 0.10 a na ubuntu 24 je 0.95
+prvo da se push nvim sa dev na github i napravi branch root-vps koja nema lsp auto-complete pluginove jer oni prave probleme i sa verzijom nvim 0.95 na ubuntu 24 i sa neinstaliranim lsp za jezike a to nije ni bitno jer na root i vps i nece da se programira nista a imace se sve key bindings itd.
+
+
+
+
+zatim na ubuntu izbrise .config/nvim i .local/nvim, clonira repo, pobrise sve iz init.lua itd. oko lsp i proba da rade samo options i keymaps
 
 
 

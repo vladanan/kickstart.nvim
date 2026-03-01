@@ -459,8 +459,3 @@ aaapet jos neke reci za ubacivanje da cujemo kako ce i to da radi
 jos malo kucao
 
 ---
-
-da se vidi ako moze kickstart u smanjenoj verziji da radi na ubuntu 24 na esim vps za root
-lazy, blink, lsp traze nvim bar 0.10 a na ubuntu 22 je 0.9 ali ako se iz init.lua pobrise sve osim keybindings u posebnoj branch onda bi bar to trebalo da radi
-prvo da se push nvim sa dev na github, zatim na ubuntu izbrise .config/nvim i .local/nvim, clonira repo, pobrise sve iz init.lua itd. oko pluginova i proba da rade samo options i keymaps
-
