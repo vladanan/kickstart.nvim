@@ -130,15 +130,15 @@ vim.opt.cursorline = false
 vim.cmd 'set autoread'
 vim.cmd 'au CursorHold * checktime'
 
-vim.lsp.config('ruff', {
-  init_options = {
-    settings = {
-      -- Ruff language server settings go here
-    },
-  },
-})
-
-vim.lsp.enable 'ruff'
+-- vim.lsp.config('ruff', {
+--   init_options = {
+--     settings = {
+--       -- Ruff language server settings go here
+--     },
+--   },
+-- })
+-- 
+-- vim.lsp.enable 'ruff'
 
 -- daje string za komentar za jezik u kome se radi slicno kao sto se dobija preko komande :set commentstring?
 function _G.GetComment()
