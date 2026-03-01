@@ -468,7 +468,7 @@ prvo da se push nvim sa dev na github i napravi branch root-vps koja nema lsp au
 
 zatim na ubuntu izbrise .config/nvim i .local/nvim, clonira repo, pobrise sve iz init.lua itd. oko lsp i proba da rade samo options i keymaps
 
-
+root-setup
 
 
 
