@@ -1,0 +1,478 @@
+2024-10-10 07:57:50
+nvim d
+
+https://neovim.io/doc/user/vimindex.html
+
+0 to LSP : Neovim RC From Scratch
+https://www.youtube.com/watch?v=w7i4amO_zaE
+
+https://betterprogramming.pub/overcoming-vim-phobia-my-journey-of-redemption-d1114e6922ab
+
+https://www.freecodecamp.org/news/vim-key-bindings-reference/
+
+Vim Cheat Sheet
+https://vim.rtorr.com/
+
+Don't Use Vim For The Wrong Reasons
+https://www.youtube.com/watch?v=YF3PyjQHy10
+
+Don't use Vim
+https://gist.github.com/romainl/6b952db7a6138b48657ba0fbb9d65370
+
+What's the best Neovim-setup for Go?
+https://www.reddit.com/r/neovim/comments/sn005i/whats_the_best_neovimsetup_for_go/
+
+prvo raspored terminal prozora i nvim-a
+zatim text editing i tabs
+zatim nalazenje i otvaranje fajlova
+
+beleske:
+
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+
+ ~/.config/nvim/init.vim for Neovim)
+
+    Begin the section with call plug#begin()
+    List the plugins with Plug commands
+    End the section with call plug#end()
+
+For example,
+
+call plug#begin()
+
+" List your plugins here
+Plug 'tpope/vim-sensible'
+
+call plug#end()
+
+
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+
+-- You dont need to set any of these options. These are the default ones. Only
+-- the loading is important
+require('telescope').setup {
+  extensions = {
+    fzf = {
+      fuzzy = true,                    -- false will only do exact matching
+      override_generic_sorter = true,  -- override the generic sorter
+      override_file_sorter = true,     -- override the file sorter
+      case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                                       -- the default case_mode is "smart_case"
+    }
+  }
+}
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension, somewhere after setup function:
+require('telescope').load_extension('fzf')
+
+
+$ sudo dnf install ripgrep
+
+Plug 'nvim-lua/plenary.nvim'
+
+https://www.reddit.com/r/neovim/comments/zko4tf/difficulty_loading_telescopenvim_lazy_or_eager/
+
+https://github.com/nvim-telescope/telescope.nvim
+
+https://github.com/nvim-lua/kickstart.nvim
+
+~$ go version
+go version go1.22.5 linux/amd64
+
+-------------------------
+
+https://github.com/nvim-lua/kickstart.nvim
+
+sudo dnf install -y fd-find
+
+git clone https://github.com/vladanan/kickstart.nvim.git "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim
+
+~$ go version
+go version go1.22.5 linux/amd64
+
+
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+vim.keymap.set("n", "Q", "<nop>")
+
+local builtin = require('telescope.builtin')
+--vim.keymap.set('n', '<leader>ff', function() require('telescope.builtin').find_files() end, {})
+vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+
+
+
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
+vim.opt.hlsearch = false
+vim.opt.incsearch = true
+
+NeoVim Is Better, But Why Devs Are Not Switching To It? | Prime Reacts
+https://www.youtube.com/watch?v=5Welk51oDWs
+
+---
+
+https://github.com/xiyaowong/transparent.nvim?tab=readme-ov-file
+-- init.lua
+require('lazy').setup({
+    {
+        'xiyaowong/transparent.nvim',
+        lazy = false,
+        config = function()
+          require('transparent').setup({
+            -- Optional: Customize transparency settings
+            groups = { -- table: groups to make transparent
+                'Normal', 'NormalFloat', 'FloatBorder', 'TelescopeBorder', 'TelescopeNormal'
+            },
+            -- Or, set default groups (see #20)
+            default_groups = true,
+          })
+        end
+    },
+    -- ... other plugins
+})
+
+POKUSAJ DA SE FORK NA GITGUB USKLADI SA ORIGINALNIM REPOOM IAKO OBA IMAJU NOVE COMMIT
+
+https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/configuring-a-remote-repository-for-a-fork
+git remote add upstream https://github.com/nvim-lua/kickstart.nvim 
+
+https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork
+https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/addressing-merge-conflicts/resolving-a-merge-conflict-using-the-command-line
+
+---
+
+ovo je kao ctrl+f5 na kate i na notepad
+This appends the current date and time after the cursor (in <> notation <>).
+
+:map <F2> a<C-R>=strftime("%c")<CR><Esc>
+
+-- iz nekog komplikovanog razloga nvim vidi F5 kao F5 ali Ctrl+F5 vidi kao F29:
+-- https://github.com/neovim/neovim/issues/7384
+-- %c daje lokalni datum tj. sa cirilicom pa sam nasao da za c/c++ funkciju strftime bolji izgled daju (%F %T)
+
+a<C-R>=strftime("%F %T")<CR><Esc>
+
+a: This stands for "append" mode. It allows you to enter insert mode after the current character under the cursor.
+
+<C-R>: This is a Vim control sequence for Ctrl+R. When pressed in insert mode, it allows you to insert the output of an expression or command.
+
+=: This means you're going to evaluate an expression or command.
+
+strftime("%F %T"): This is the command being evaluated. strftime is a Vim function that returns the current date and time in a specific format:
+
+  %F corresponds to the date in the format YYYY-MM-DD.
+
+  %T corresponds to the time in the format HH:MM:SS.
+
+<CR>: This simulates pressing Enter (Carriage Return). It executes the command and returns the result to insert mode.
+
+<Esc>: After executing the command, the <Esc> escapes insert mode and returns you to normal mode.
+
+---
+
+The Vi editor was originally written on an ADM-3A terminal, which had the Escape key positioned where the Tab key occurs on most modern keyboards. 
+
+---
+
+You Don't Want Syntax Highlighting Like This 
+https://www.youtube.com/watch?v=WQdSE1AxiJU
+https://tonsky.me/blog/syntax-highlighting/
+https://github.com/tonsky/sublime-scheme-alabaster?tab=readme-ov-file#variations-1
+
+---
+
+uradjen update i prvo su ispravljeni konflikti a zatim i greske
+
+-- Diagnostic keymaps
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror message' })
+
+<<<<<<< HEAD
+      -- this setting is independent of vim.opt.timeoutlen
+      delay = 2000,
+      icons = {
+        -- set icon mappings to true if you have a Nerd Font
+        mappings = vim.g.have_nerd_font,
+        -- If you are using a Nerd Font: set icons.keys to an empty table which will use the
+        -- default which-key.nvim defined Nerd Font icons, otherwise define a string table
+        keys = vim.g.have_nerd_font and {} or {
+          Up = '<Up> ',
+          Down = '<Down> ',
+          Left = '<Left> ',
+          Right = '<Right> ',
+          C = '<C-�~@�> ',
+          M = '<M-�~@�> ',
+          D = '<D-�~@�> ',
+          S = '<S-�~@�> ',
+          CR = '<CR> ',
+          Esc = '<Esc> ',
+          ScrollWheelDown = '<ScrollWheelDown> ',
+          ScrollWheelUp = '<ScrollWheelUp> ',
+          NL = '<NL> ',
+          BS = '<BS> ',
+          Space = '<Space> ',
+          Tab = '<Tab> ',
+          F1 = '<F1>',
+          F2 = '<F2>',
+          F3 = '<F3>',
+          F4 = '<F4>',
+          F5 = '<F5>',
+          F6 = '<F6>',
+          F7 = '<F7>',
+          F8 = '<F8>',
+          F9 = '<F9>',
+          F10 = '<F10>',
+          F11 = '<F11>',
+          F12 = '<F12>',
+        },
+      },
+=======
+
+<<<<<<< HEAD
+          -- Fuzzy find all the symbols in your current document.
+          --  Symbols are things like variables, functions, types, etc.
+          map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
+
+          --vim.keymap.set('n', '<leader>ls', vim.lsp.buf.document_symbol, { desc = 'LSP Document Symbols' })
+
+          -- Fuzzy find all the symbols in your current workspace.
+          --  Similar to document symbols, except searches over your entire project.
+          map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
+
+          -- Jump to the type of the word under your cursor.
+          --  Useful when you're not sure what type a variable is and you want to see
+          --  the definition of its *type*, not where it was *defined*.
+          map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
+
+          -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
+          ---@param client vim.lsp.Client
+          ---@param method vim.lsp.protocol.Method
+          ---@param bufnr? integer some lsp support methods only in specific files
+          ---@return boolean
+          local function client_supports_method(client, method, bufnr)
+            if vim.fn.has 'nvim-0.11' == 1 then
+              return client:supports_method(method, bufnr)
+            else
+              return client.supports_method(method, { bufnr = bufnr })
+            end
+          end
+
+=======
+
+
+Failed to run `config` for nvim-treesitter
+
+/home/vladan/.config/nvim/init.lua:1131: attempt to call field 'install' (a nil value)
+
+# stacktrace:
+  - init.lua:1131 _in_ **config**
+  - init.lua:484
+
+ali i nakon ispravljenih gresaka nije sve radilo kako treba pa sam vratio na staro
+
+u glavnom repou su se nagomilali problemi i nema ko da  odrzava pa se sada pregovara da se nekome to dodeli koji je vec napravio fork i odrzava ga ali po modularnom principu
+
+vratio sam i moj fork repo na staro sa: git push -f
+
+---
+
+resenja da se resi sto se lua_ls zali na globalnu vim promenljivu nisu radila jer se oslanjaju na lspconfig modul a kickstart koristi drugi tj. neovim/nvim-lspconfig
+ionda sam ispod local servers iskopirao iz akutuelne kickstart verzije ovo i onda je proradilo:
+
+-- Special Lua Config, as recommended by neovim help docs
+ vim.lsp.config('lua_ls', {
+  on_init = function(client)
+    if client.workspace_folders then
+      local path = client.workspace_folders[1].name
+      if path ~= vim.fn.stdpath 'config' and (vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc')) then return end
+    end
+
+    client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+      runtime = {
+        version = 'LuaJIT',
+        path = { 'lua/?.lua', 'lua/?/init.lua' },
+      },
+      workspace = {
+        checkThirdParty = false,
+        -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
+        --  See https://github.com/neovim/nvim-lspconfig/issues/3189
+        library = vim.api.nvim_get_runtime_file('', true),
+      },
+    })
+  end,
+  settings = {
+    Lua = {},
+  },
+ })
+
+sada da probamo da se moje options i keymaps stave u zaseban fajl nezavisan od kickstart dzinovskog init.lua i da mogu da se koriste i u drugim kickstart modularnim repoima
+
+i stavicu redirekciju ka svojim pre ovog dela u init.lua:
+-- [[ Configure and install plugins ]]
+
+ovi moji pluginovi i podesavanja moraju da ostanu a narocito ovi jer rade a u glavnom je mnogo izmena:
+- iskljucena 'folke/tokyonight.nvim' tema
+- providni vim:
+  {
+    'xiyaowong/transparent.nvim',
+    lazy = false,
+    config = function()
+      require('transparent').setup {
+        -- Optional: Customize transparency settings
+        groups = { -- table: groups to make transparent
+          'Normal',
+          'NormalFloat',
+          'FloatBorder',
+          'TelescopeBorder',
+          'TelescopeNormal',
+        },
+        -- Or, set default groups (see #20)
+        default_groups = true,
+      }
+    end,
+  },
+- Special Lua Config
+- treesiter:
+  { -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    opts = {
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      -- Autoinstall languages that are not installed
+      auto_install = true,
+      highlight = {
+        enable = true,
+        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+        --  If you are experiencing weird indenting issues, add the language to
+        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+        additional_vim_regex_highlighting = { 'ruby' },
+      },
+      indent = { enable = true, disable = { 'ruby' } },
+    },
+
+da se ne vide .git i node_modules u telescope find file picker:
+  require('telescope').setup {
+    -- You can put your default mappings / updates / etc. in here
+    --  All the info you're looking for is in `:help telescope.setup()`
+    --
+    -- defaults = {
+    --   mappings = {
+    --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+    --   },
+    -- },
+    defaults = {
+      file_ignore_patterns = {
+        'node_modules',
+        '.git',
+      },
+    },
+
+potpuno modularni kickstart ali se izgleda vise ne odrzava:
+https://github.com/dam9000/kickstart-modular.nvim
+
+njegov fork koji je cini mi se identican kickstartu osim nekih bugfix i izgleda da ce autor da bude novi maintainer za kickstart:
+https://github.com/oriori1703/kickstart-modular.nvim
+
+za sada drzim svoj mini modularni setup i cekam da vidim sta ce da se desi sa glavnim kickstart reopoom
+
+---
+
+imao sam nvf alias koji iz nvim.files izvuce spisak fajlova koje zelim da mi se uvek otvore kada sam u root folderu projekta i to kao tabove
+alias nvf='cat nvim.files | xargs nvim -p'
+
+postao je nepotreban jer nvim ima cuvanje sesije tako sa se sa :mks cuva sesija a sa nv -S vraca
+
+If you do not specify a session file name, it will default to writing to and reading from Session.vim. So if you only want to have only one session saved in your current directory, you can use :mksession or :mks from vim to save your current session, and just vim -S to open it back up.
+
+---
+
+pluginovi
+
+primagean i harpoon prica, korisno za pregled raznih navigacija u nvim:
+https://www.youtube.com/watch?v=Qnos8aApa9g
+
+plugin za neovim undotree koji daje pregled izmena u vidu tree kroz koji moze da se seta i vraca na prethodne verzije
+
+plugin Harpoon koji se pravi globalna bookmarks lista fajlova do kojih se stize lako nekom precicom i vezani su za projekat (mislim da slicno moze da se uradi i sa tabovima i precicom za tabove)
+
+sjajno objasnjenje treesittera koji koriste editori, lsp, higlight, folding itd. alati za obradu teksta (jednog fajla) tako sto on pravi tree strukturu fajla sa oznamaka itd a onda ostali to koriste da prave upite i komande nad strukturom tog tee generisanog iz teksta fajla (treesitter uzima fajla sa gramatikom nekog jezika i od toga pravi parser u c jeziku koji onda editor koristi kao neku vrstu plugin-a i onda sa tim analizira fajl i pravi tree i to se koristi za brze upite i manipulaciju osnovnim tekstom)
+https://www.youtube.com/watch?v=09-9LltqWLY
+
+neovim terminal unutar vim-a:
+https://www.youtube.com/watch?v=ooTcnx066Do
+
+plutajuci terminal u neovim:
+https://www.youtube.com/watch?v=5PIiKDES_wc
+
+sa :125 ide se na liniju 125 isto kao i sa 125gg
+
+https://www.youtube.com/watch?v=FrMRyXtiJkc
+primagean demonstrira neovim:
+  - demonstrira i ono sto ima u kickstart: lsp da ima i vca tj. gra: 
+vim keymap set "n", “<leader>vca", function’) vim.lsp.buf.code_action() end, opts
+i to onda automatski ispravlja gresku u kodu nesto kao fast fix u vsc
+  - ima pluging context koji prikazuje u vrhu pocetnu liniju func i tako pokazuje gde si (kao u vsc)
+  - demonstrira undo-tree plugin, kao i fugitive git plugin u okviru neovim
+
+---
+
+ne radi :nohlsearch iako je stavljen i u init.lua i u moj optons fajl
+stavio odmah nakon pozivanja mojih modularnih options i keymaps i ne vredi
+ispostavilo se da je problem u fajlu Session.vim za esim projekat gde je na jednom mestu bilo i da se podesi i razdesi nohlsearch pa sam obrisao visak i radi kako treba 
+
+---
+
+premestiti svoje pluginove iz init.lua u vec postojeci folder i fajl za to odredjeni ukljucujuci i harpoon 
+'xiyaowong/transparent.nvim',
+
+---
+
+oko linije 611 je bila privremena func za kompatibilnost sa ranijom verzijom nvim koja je davala gresku a poziva se u dve donje if i autocommand pa sam upotrebio verzije iz aktuealnog kickstart i radi okej
+
+---
+
+dodao u treesitter podesavanje:         'python',
+        'javascript',
+        'typescript',
+
+---
+
+-- niz komandi za yank, search and replace
+
+[c da se kursor popne na def func uz pomoc nvim-treesitter/nvim-treesitter-context plugin koji je instaliran u ../lua/custom/plugins/init.lua
+
+---
+
+dodati keymaps za komentovanje i uncomentovanje paragrafa i func/{}block i selection
+
+---
+
+da se vidi ako moze kickstart u smanjenoj verziji da radi na ubuntu 24 na esim vps za root
+
+lazydev, blink, lsp traze nvim bar 0.10 a na ubuntu 24 je 0.95
+prvo da se push nvim sa dev na github i napravi branch root-vps koja nema lsp auto-complete pluginove jer oni prave probleme i sa verzijom nvim 0.95 na ubuntu 24 i sa neinstaliranim lsp za jezike a to nije ni bitno jer na root i vps i nece da se programira nista a imace se sve key bindings itd.
+
+zatim na ubuntu izbrise: ~/.config/nvim i ~/.local/nvim, ~/.state/nvim, ~/.cache/nvim, (pri reinstalacijama se brise i ~/.config/nvim/lazy-lock.json), clonira repo, pobrise sve iz init.lua itd. oko lsp i proba da rade samo options i keymaps
+
+osim lsp i auto-complete morao da comentujem u colors da nema vim.lua u izvrsnom folderu kao i u options da nema lsp za python, i sada treesiter ludi jer nema lsp i to mora da se ispravi
+comentovao plugin context u lua/custom/plugins/init.lua
+ispravio vazdan toga i uz pomoc gpt nasao verzije telescope i treesitter koje hoce da rade sa nvim 0.9.5 i instalirao ripgrep da radi search grep u telescope
+komentovao i dva dela oko clipboard jer nemaju smisla na vps i javljaju greske
+
+na neoserv sam soft linkovao conf sa esim na root da dele conf i radi
+na fedora i root i user rade sa master branch bez linkovanja osim sto na root javlja da nije mogao da instalira gopls a to je bilo jer nije bila podesen path za go a kada sam to uradio tokom sredjivanja bash config onda je instalirao gopls mada nepotrebno
+
+
+
+
