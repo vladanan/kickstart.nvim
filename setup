@@ -473,6 +473,283 @@ komentovao i dva dela oko clipboard jer nemaju smisla na vps i javljaju greske
 na neoserv sam soft linkovao conf sa esim na root da dele conf i radi
 na fedora i root i user rade sa master branch bez linkovanja osim sto na root javlja da nije mogao da instalira gopls a to je bilo jer nije bila podesen path za go a kada sam to uradio tokom sredjivanja bash config onda je instalirao gopls mada nepotrebno
 
+---
+
+nvim-old na nc vps alma linux:
+
+sudo dnf install -y neovim python3-neovim
+instalirao je 18 paketa
+
+E5113: Error while calling lua chunk: /home/vladan/.config/nvim/lua/options.lua:31: Vim(source):E484: Can't open fil
+/usr/share/nvim/runtime/colors/vim.lua
+promenio svoj fajl colors tako da fallbach bude default.vim kojeg valjda ima u svim instalacijama za razliku od vim.lua
+fali mu treesiter pa mora da se instalira
+https://github.com/nvim-lua/kickstart.nvim
+sudo dnf install -y ripgrep fd-find tree-sitter-cli
+kaze ne postoji tree-sitter-cli ni tree-sitter
+ali izgleda da je problem u verziji nvim tako da cu da povucem instal sa mog git i ukljucim root-vps branch
+verzija nvim na vps alma linux je 0.8.0 sto je katastrofa i tesko da moze ista da radi od treesiter, telescope i ostalih stvari nego samo keymaps i sta vec, tako da cu da izbrisem .git da mi ne zeza github i onda cu da ga osakatim tako da radi samo ono sto ne pravi probleme
+komentovao sam treesitter (nije video svoje pluginove iako su svi u folderima gde treba) i telescope a zatim izbrisao iz init.lua i sve sto ima veze sa pluginovima i sada radi bez greska ali je sporo preko vps-a
+
+uradio fallbach u colors i u svom glavnom forku na master bude default.vim kojeg valjda ima u svim instalacijama za razliku od vim.lua
+
+---
+
+novi nvim 0.12.1 i sredjeni kickstart i moj novi fork
+
+
+- buduci da na nvim mora da se ispravlja init.lua da bi radila sa novim instalacijama sistema preko setup skriptova to onda nije automatski i potrebno je da se moj kickstarter fork uskladi sa glavnim repoom
+- i da se instalacija za update nvim zasniva na .tar.gz umesto dnf jer dnf mnogo kasni za nvim i kickstarter
+- istraziti novi kickstarter radi lakseg updatovanja sa novostima i napretkom (na novoj fedori43 je nvim 0.11.6 i ostace tako na 44 i 45, a izasli su 0.12, 0.13, a kickstarter gadja latest stable koji je 0.12.1) stvar je u tome sto ako se ide na download .tar.gz fajla i rucno instaliranje onda se verovatn gubi update preko dnf i mora stalno rucno da se radi update), vazno je da se prate nove verzije nvim i kickstarter zbog izmena u package managery, lsp, treestier, pluginova, novih funkcija i opcija, itd. i to preko paralelnih konfiguracija i instalacija:
+https://github.com/nvim-lua/kickstart.nvim#faq
+
+
+skroz obrisati nvim i sve foldere i fajlove
+sudo dnf remove nvim
+brisanje/rename/backup povezanih foldera:
+~/.config/nvim
+~/.local/share/nvim
+~/.state/nvim (nema ga na vm)
+~/.cache/nvim
+(pri reinstalacijama se brise i ~/.config/nvim/lazy-lock.json)
+
+
+napravljeni su novi install skriptovi 6 i 7
+6-nvim:
+instalirati nvim sa .tar.gz u neki bin folder i napraviti precicu u /usr/bin ili gde je vec bio izvrsni fajl
+https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.tar.gz
+Tarball
+    Download nvim-linux-x86_64.tar.gz
+    Extract: tar xzvf nvim-linux-x86_64.tar.gz
+    Run ./nvim-linux-x86_64/bin/nvim
+bez postojeceg .config/nvim napravio je prazan folder u .local/share
+greskom ukljucio nvim i krenuo da instalira sve zivo pa prekinuo i napravio je i punio foldere u .cash/nvim i .local/share/nvim
+
+7-kickstarter:
+rename .config, clonirati moj fork
+git clone https://github.com/vladanan/kickstart.nvim.git
+
+napravljena privremena verzija koja clonira glavni kickstart jer je lakse radi probe u njega ubaciti moje delove nego diffovati sve konflikte iz mog forka sa glavnim repo, ako radi onda pravim novi fork i uradim to isto
+
+prilikom prvog pokretanja kickstarter je instalirao sve i zatim javljao greske, naravno, sa treesitterom, 3-4 za redom koje ne razumem
+kaze ai da nema tree-sitter-cli koji je izgleda bio sa instalacijom nevim ali je izbrisan zajedno sa njim kao dependency tako da cu da probam sledece: rename precicu za 0.12.1 u /usr/bin, instaliram preko dnf neovim 0.11.6 i uz njega ide tree-sitter i ostalo, rename izvrsnog za taj nevim u nvim-dnf, vracanje imena nvim za precicu za 0.12.1
+
+radi!
+
+listing instalacije sudo dnf install neovim
+Package                                              Arch         Version                                              Repository                        Size
+Installing:
+ neovim                                              x86_64       0.11.6-1.fc43                                        updates                       31.4 MiB
+Installing dependencies:
+ compat-lua-libs                                     x86_64       5.1.5-29.fc43                                        fedora                       498.1 KiB
+ libluv                                              x86_64       1.51.0.2-2.fc43                                      updates                      212.1 KiB
+ libtree-sitter                                      x86_64       0.25.8-2.fc43                                        fedora                       208.3 KiB
+ libvterm                                            x86_64       0.3.3-6.fc43                                         fedora                        78.1 KiB
+ lua5.1-lpeg                                         x86_64       1.1.0-6.fc43                                         fedora                        67.4 KiB
+ luajit                                              x86_64       2.1.1767980792-1.fc43                                updates                        1.4 MiB
+ luajit2.1-luv                                       x86_64       1.51.0.2-2.fc43                                      updates                      195.0 KiB
+ nodejs-libs                                         x86_64       1:22.22.0-2.fc43                                     updates                       78.1 MiB
+ unibilium                                           x86_64       2.1.2-4.fc43                                         fedora                        66.3 KiB
+ utf8proc                                            x86_64       2.10.0-2.fc43                                        fedora                       372.0 KiB
+Installing weak dependencies:
+ inotify-tools                                       x86_64       4.23.9.0-5.fc43                                      fedora                       197.9 KiB
+ nodejs                                              x86_64       1:22.22.0-2.fc43                                     updates                      161.6 KiB
+ nodejs-docs                                         noarch       1:22.22.0-2.fc43                                     updates                       97.5 MiB
+ nodejs-full-i18n                                    x86_64       1:22.22.0-2.fc43                                     updates                       30.4 MiB
+ nodejs-npm                                          x86_64       1:10.9.4-1.22.22.0.2.fc43                            updates                        9.2 MiB
+ tree-sitter-cli                                     x86_64       0.25.10-1.fc43                                       fedora                         7.2 MiB
+ xsel
+
+prvo da probam da oznacim lsp za go, ts, javu
+
+dodato u tree-sitter local parsers = {... 'javascript', 'typescript', 'go', 'java'
+dodao moje fajlove u root, lua, colors
+komentovao tokyonight temu da bi se videla moja quietv tema
+treba da se instaliraju linteri itd kojih nema:
+
+css-lsp
+goimports-reviser
+ruff za python jos necemo
+tailwindcss-language-server
+templ
+textlint
+
+kao i nesto posebno za javu
+https://github.com/nvim-java/nvim-java
+to se samo dodalo kada sam ukljucio svoje pluginove falio je jos jedan dodatak u init.lua nakon:
+      -- Special Lua Config, as recommended by neovim help docs
+      vim.lsp.config('jdtls', {
+        settings = {
+          java = {
+            configuration = {
+              runtimes = {
+                {
+                  name = 'JavaSE-25',
+                  path = '/home/vladan/programiranje/jdk/jdk-25.0.2',
+                  default = true,
+                },
+              },
+            },
+          },
+        },
+      })
+mada taj dodatak verovatno nije potreban jer na vm vec ima jdk 25 ali treba da bude sa njim jer necu da se oslanjam na dnf instaliranu javu i verzije nego na ono sto skinem i postavim
+nego mozda fale isti dodaci kao i za go i typescript u init.lua za java lsp: jdtls (go = gopls, lua = lua_ls, typescript/javascript = ts_ls
+kada sam na sva mesta ispoubacivao javu radi kako treba
+
+
+u go nece samo da sredi indente na save
+dopunio neke stvari u autoformat stevearc koji nema u prosloj verziji podesavanja za taj plugin
+sada radi
+sredio sam jos neke stvari (leader ff za Explore i jos nesto cega se necam sada) u init.lua i shvatio da sve to ne moze da se radi van tog fajla ili jako tesko tako da ostaje da se prilikom mergovanja sa glavnim kickstart radi diff
+zaboravio za statusnu liniju moj poseban format kod:
+      statusline.section_location = function()
+
+zaboravio i ovo ispod telescope.builtin precica:
+
+      -- vim.keymap.set('n', '<leader>sm', live_multigrep) precica je upisana u samom pluginu za multigrep koji je napravio teej_dv za telescope i koji se dole poziva
+      require('custom.telescope.multigrep').setup()
+
+izmenjeni i dodati fajlovi u kickstart:
+
+nvim *(master) > git status
+On branch master
+Your branch is up to date with 'origin/master'.
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   init.lua
+	modified:   lua/custom/plugins/init.lua
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	colors/
+	lua/custom/telescope/
+	lua/keymaps.lua
+	lua/options.lua
+	setup
+	tips
+	vimtutor.txt
+no changes added to commit (use "git add" and/or "git commit -a")
+
+ubaciti novi .config/nvim u setup, napraviti novi fork na na github, srediti sve kao sto je uradjeno i za glavni kickstart test na vm, napraviti i branch gde su potpuno iskljuceni lazy plugins (za name cheap vps alma linux gde je nvim 0.8, mada ako moze da se stavi novi onda nema veze)
+
+branch koji sam napravio sa starim verzijama za vps/root postaje nebitan jer ce za te namene da bude jednostavan branch gde su onesposobljeni svi pluginovi i lsp, ali cu svakako da sacuvam svoj prvi fork i za uspomenu i radi brancha sa starijim verzijama pluginova
+
+sada za fedoru na fujitsu isto kao i za vm:
+
+skroz obrisati nvim i sve foldere i fajlove
+preimenovati sve foldere dole:
+brisanje/rename/backup povezanih foldera:
+~/.config/nvim
+~/.local/share/nvim
+~/.local/.state/nvim
+~/.cache/nvim
+(pri reinstalacijama se brise i ~/.config/nvim/lazy-lock.json)
+sudo dnf remove nvim ne treba jer su svi dep za kicks vec instalirani ukljucujuci i tree-sitter-cli
+proveriti stanje
+
+novi install skriptovi 6 i 7
+mogu da se bez problema pokrenu ali treba imati u vidu da nvim izvrsni postoji i u /usr/bin i /usr/sbin i to zato sto je sbin link za bin, which za root pokazuje na onog u sbin jer je u path on pre bin a na user je u path prvi bin i pokazuje na njega
+
+instalirao oba i sve se instaliralo bez problema sada ide transplantacija sa vm verzije fajlova ukljucujuci i init.lua jer je ceo sredjen i spakovan vec na vm 
+instalira novo sto je otkrio
+
+treba da se instaliraju linteri itd kojih nema:
+css-lsp
+goimports-reviser
+ruff za python jos necemo
+tailwindcss-language-server
+templ
+textlint
+
+kao i nesto posebno za javu
+https://github.com/nvim-java/nvim-java
+to se samo dodalo kada sam ukljucio svoje pluginove falio je jos jedan dodatak u init.lua nakon:
+      -- Special Lua Config, as recommended by neovim help docs
+      vim.lsp.config('jdtls', {
+        settings = {
+          java = {
+            configuration = {
+              runtimes = {
+                {
+                  name = 'JavaSE-25',
+                  path = '/home/vladan/java/jdk-25.0.2',
+                  default = true,
+                },
+              },
+            },
+          },
+        },
+      })
+
+mada taj dodatak nije potreban na vm jer vec ima jdk 25 ali treba da bude sa ovim dodatkom jer necu da se oslanjam na dnf instaliranu javu i verzije nego na ono sto skinem i postavim
+buducii da odmah nije imao ovaj dodatak on sam instalira jdk 25 na sistem
+ako je tako to cu morati da skinem i usmerim ga na fiksnu verziju koju sam postavio
+nije na sistemu nego kod sebe u .config/.local/.share nvim-java
+videcu da i to izbrisem, izbrisao folder po savetu sa neta ali ga opet skida, izgleda da ono podesavanje nema veze i plugin ima to hardcoded da skida i koristi
+dodao i ovo kao i ceo segment po uputstvu sa github strane ali nece i jos se nesto i pobrkalo pa ne radi ni kako je radilo i javlja neku gresku:
+      require('java').setup {
+        -- JDK installation
+        jdk = {
+          auto_install = false,
+          version = '25',
+        },
+      }
+pobrisao sam dir /home/vladan/.local/share/nvim/nvim-java/ i pustio da se opet sve instalira
+nije pomoglo
+obrisao ne samo nvim-java nego i u sve u share sto ima veze sa java i jdtls
+nui-nvim
+nvim-dap
+spring-boot.nvim
+ponovo sve instalira
+vratio sve kako treba i izbrisao .cash/nvim i .state/nvim pored jdk25
+jdtls ne uspeva da se instalira, jedino da izbrisem ceo .local/nvim i ostalo
+cpu ludeo i video lua language server da radi a svim nvim pogaseni i onda nasao da je jedan bio u pozadini jer sam izasao as ctrl-z a nisam se vratio sa fg
+a vec izbrisao sve foldere osim .config/nvim
+jdtls
+java-test
+java-debug
+spring-boot-tools
+sve proslo okej i opet javlja gresku kada se otvori Main.java fajl
+nije imao java u path, ispravio u /usr/bin
+radi i sa delom gde odredjuje jdk, i gde je auto intall false i ne instalira vise svoj jdk
+
+- tab je 4 za javu a 2 za go, podesiti ako moze i javu
+
+- branch bez plugins za root i vps
+git remote set-url origin git@github.com:vladanan/kickstart.nvim.git
+
+na root:
+git clone https://github.com/vladanan/kickstart.nvim.git
+mv kickstart.nvim nvim
+cd nvim
+git remote set-url origin git@github.com:vladanan/kickstart.nvim.git
+git checkout root-vps 
+rade keys i options ali nema ucitavanja i razvlacenja sa pluginovima
+
+vps alma linux user vladan:
+pobrisao sve iz cache/state/share i rename u .config
+git clone https://github.com/vladanan/kickstart.nvim.git
+mv kickstart.nvim nvim
+cd nvim
+git remote set-url origin git@github.com:vladanan/kickstart.nvim.git
+git checkout root-vps 
+zali se na pozivanje ruff lsp za python pa sam to komentovao
+rade keys i options ali nema ucitavanja i razvlacenja sa pluginovima
 
 
 
+
+
+
+videti oko mergovanja promena u master tako da ih ima i u root pogotovo oko mojih fajlova
+
+treba da se instaliraju linteri itd kojih nema:
+css-lsp
+goimports-reviser
+ruff za python jos necemo
+tailwindcss-language-server
+templ
+textlint
+
+- da se pomeri multi grep dole gde je uvoz ili da se ubaci u uvezene nekako
