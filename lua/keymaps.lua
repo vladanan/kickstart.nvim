@@ -124,7 +124,7 @@ end, { desc = '[D]iff buffer vs [s]aved file' })
 -- ne moze da se sam ctrl mapira na backspace jer to vim ne dozvoljava, samo kombinacije nesto za tastera sa ctrl
 vim.keymap.set('n', '<BS>', '<C-w>', { desc = 'Map Backspace to Ctrl+w for (split) window commands' })
 
-vim.keymap.set('n', 'Zz', 'ZQ', {
-  noremap = true,
-  desc = 'Quit without saving (like ZQ)',
-})
+-- ovo radi normalno na master branch koja ima puno pluginova a ne radi na root-vps koji ih nema??
+-- vim.keymap.set('n', 'Zz', 'ZQ', { noremap = true, desc = 'Quit without saving (like ZQ)' })
+-- ovo radi na obe branch
+vim.keymap.set('n', '<leader>x', '<cmd>q!<CR>')
