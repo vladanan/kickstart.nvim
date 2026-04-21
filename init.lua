@@ -207,11 +207,11 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
---  ovo je iskljuceno kako se ne bi kosilo sa keymap za Quickfix list iteraciju
---vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left window" })
---vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
---vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
---vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
+-- donja dva su override-ovani kasnije u lua/keymaps.lua za kretanje u Quickfix list
+vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -244,10 +244,10 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
--- [[ Podesavanje custom opcija iz ./lua/options.lua ]]
+-- [[ Override i dodatno podesavanje opcija iz ./lua/options.lua ]]
 require 'options'
 
--- [[ Podesavanje custom keymaps iz ./lua/keymaps.lua ]]
+-- [[ Override i dodatno podesavanje keymaps iz ./lua/keymaps.lua ]]
 require 'keymaps'
 
 -- [[ Configure and install plugins ]]
@@ -400,6 +400,7 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
+        -- moja podesavanja za telescope
         defaults = {
           hidden = true,
           no_ignore = true,
@@ -425,7 +426,6 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
-      vim.keymap.set('n', '<leader>ff', vim.cmd.Ex)
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
@@ -438,11 +438,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sc', builtin.commands, { desc = '[S]earch [C]ommands' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
-      -- vim.keymap.set('n', '<leader>sm', live_multigrep) precica je upisana u samom pluginu za multigrep koji je napravio teej_dv za telescope i koji se dole poziva
-      -- koristi se tako sto se ukuca rec za pretragu, dva spejsa, ime fajla (korisno kada ista rec postoji u vise fajlova)
-      -- ovo je bolje da se stavi dole gde se uvoze custom pluginovi
-      require('custom.telescope.multigrep').setup()
-
+      -- dodatna: '<leader>sm' precica za multigrep je upisana u samom pluginu za multigrep (koji je napravio teej_dv za telescope), uvozi se zajedno sa custom/plugins na kraju init.lua, koristi se tako sto se ukuca rec za pretragu, dva spejsa, ime fajla (korisno kada ista rec postoji u vise fajlova)
 
       -- This runs on LSP attach per buffer (see main LSP attach function in 'neovim/nvim-lspconfig' config for more info,
       -- it is better explained there). This allows easily switching between pickers if you prefer using something else!
@@ -628,6 +624,7 @@ require('lazy').setup({
       ---@type table<string, vim.lsp.Config>
       local servers = {
         -- clangd = {},
+        -- ukljucivanje language servers za go, js/ts, javu
         gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -637,7 +634,7 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         ts_ls = {},
-        jdtls = {},
+        -- jdtls za javu je definisan u zasebnom fajlu lua/custom/lsp/jdtls.lua
 
         stylua = {}, -- Used to format Lua code
 
@@ -676,21 +673,8 @@ require('lazy').setup({
         },
       }
 
-      vim.lsp.config('jdtls', {
-        settings = {
-          java = {
-            configuration = {
-              runtimes = {
-                {
-                  name = 'JavaSE-25',
-                  path = '/home/vladan/java/jdk-25.0.2',
-                  default = true,
-                },
-              },
-            },
-          },
-        },
-      })
+      -- custom java jdk za jdtls
+      vim.lsp.config('jdtls', require 'custom.lsp.jdtls')
 
       -- Ensure the servers and tools above are installed
       --
@@ -715,6 +699,7 @@ require('lazy').setup({
 
   { -- Autoformat
     'stevearc/conform.nvim',
+    -- za ovaj plugin ima override u fajlu: lua/custom/plugins/conform.lua
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
     keys = {
@@ -732,12 +717,8 @@ require('lazy').setup({
       format_on_save = function(bufnr)
         -- You can specify filetypes to autoformat on save here:
         local enabled_filetypes = {
-          lua = true,
+          -- lua = true,
           -- python = true,
-          go = true,
-          java = true,
-          javascript = true,
-          typescript = true,
         }
         if enabled_filetypes[vim.bo[bufnr].filetype] then
           return { timeout_ms = 500 }
@@ -751,10 +732,6 @@ require('lazy').setup({
       -- You can also specify external formatters in here.
       formatters_by_ft = {
         -- rust = { 'rustfmt' },
-        go = {'gopls'},
-        java = {'jdtls'},
-        typescript = {'ts_ls'},
-        javascript = {'ts_ls'},
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -857,27 +834,29 @@ require('lazy').setup({
     },
   },
 
-  -- { -- You can easily change to a different colorscheme.
-  --   -- Change the name of the colorscheme plugin below, and then
-  --   -- change the command in the config to whatever the name of that colorscheme is.
-  --   --
-  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --   'folke/tokyonight.nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   config = function()
-  --     ---@diagnostic disable-next-line: missing-fields
-  --     require('tokyonight').setup {
-  --       styles = {
-  --         comments = { italic = false }, -- Disable italics in comments
-  --       },
-  --     }
+  { -- You can easily change to a different colorscheme.
+    -- Change the name of the colorscheme plugin below, and then
+    -- change the command in the config to whatever the name of that colorscheme is.
+    --
+    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+    'folke/tokyonight.nvim',
+    priority = 1000, -- Make sure to load this before all the other start plugins.
+    config = function()
+      ---@diagnostic disable-next-line: missing-fields
+      require('tokyonight').setup {
+        styles = {
+          comments = { italic = false }, -- Disable italics in comments
+        },
+      }
 
-  --     -- Load the colorscheme here.
-  --     -- Like many other themes, this one has different styles, and you could load
-  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  --     vim.cmd.colorscheme 'tokyonight-night'
-  --   end,
-  -- },
+      -- Load the colorscheme here.
+      -- Like many other themes, this one has different styles, and you could load
+      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      -- vim.cmd.colorscheme 'tokyonight-night'
+      -- ukljucivanje moje teme umesto tokyo i ociglednije je ovde nego u lua/options
+      vim.cmd 'colorscheme quietv'
+    end,
+  },
 
   -- Highlight todo, notes, etc in comments
   {
@@ -927,6 +906,8 @@ require('lazy').setup({
       -- cursor location to LINE:COLUMN
       ---@diagnostic disable-next-line: duplicate-set-field
       statusline.section_location = function() return '%l/%L : %v' end
+      -- moja verzija statusne linije da pokazuje gde je kursor na kojoj od koliko linija
+      -- ovo dole je default za kiskstarter ali moja verzija mora gore zbog diagnostic poruke
       -- statusline.section_location = function() return '%2l:%-2v' end
 
       -- ... and there is more!
@@ -942,8 +923,11 @@ require('lazy').setup({
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter-intro`
     config = function()
       -- ensure basic parser are installed
-      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'javascript', 'typescript', 'go', 'java'}
+      local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+      -- dodati treesitter parseri i za jezike koji mi trebaju
+      vim.list_extend(parsers, { 'javascript', 'typescript', 'go', 'java' })
       require('nvim-treesitter').install(parsers)
+
       ---@param buf integer
       ---@param language string
       local function treesitter_try_attach(buf, language)

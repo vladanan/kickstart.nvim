@@ -28,7 +28,10 @@ vim.o.scrolloff = 0
 -- /usr/share/nvim/runtime/colors/quiet.vim
 -- ali na quiet se ne vidi lepo ni potpis func sa shift+k, ni aktivna func za koju sam dole podesio F2 a na default se vidi lepo, tako da mora da se vidi da se ili finije podesi shift+K F2 na quiet i to sam uradio tako sto sam napravio svoju novu temu quietv po uputstvu na https://neovim.io/doc/user/usr_06.html i dodao:
 --  hi NormalFloat guifg=#dadada guibg=NONE gui=NONE cterm=NONE i sada radi lepo a videcu sta jos mogu da podesim ako mi zatreba
-vim.cmd 'colorscheme quietv'
+
+-- ovo je ukljuceno tamo gde je tokyo
+-- vim.cmd 'colorscheme quietv'
+
 --vim.cmd 'colorscheme default'
 -- izmene default ne idu a menjanje quiet takodje ne idu da se ovo desava (jer zuta za highlight uvek preboji highlight i tekst se tesko cita):
 -- what woud be the setting for this:
@@ -143,9 +146,7 @@ vim.lsp.enable 'ruff'
 -- daje string za komentar za jezik u kome se radi slicno kao sto se dobija preko komande :set commentstring?
 function _G.GetComment()
   local cs = vim.bo.commentstring
-  if not cs or cs == '' then
-    return ''
-  end
+  if not cs or cs == '' then return '' end
 
   local prefix = cs:match '^(.*)%%s' or cs
   prefix = prefix:gsub('%s+$', '') .. ' '

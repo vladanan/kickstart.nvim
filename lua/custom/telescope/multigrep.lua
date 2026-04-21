@@ -5,15 +5,15 @@ local conf = require('telescope.config').values
 
 local M = {}
 
-local live_multigrep = function(opts)
+-- nacim sa malo izmenjenim multigrep ali boljom integracijom sa telescope u ovim custom dir
+-- local live_multigrep = function(opts)
+M.live_multigrep = function(opts)
   opts = opts or {}
   opts.cwd = opts.cwd or vim.uv.cwd()
 
   local finder = finders.new_async_job {
     command_generator = function(prompt)
-      if not prompt or prompt == '' then
-        return nil
-      end
+      if not prompt or prompt == '' then return nil end
 
       local pieces = vim.split(prompt, '  ')
       local args = { 'rg' }
@@ -48,8 +48,8 @@ local live_multigrep = function(opts)
     :find()
 end
 
-M.setup = function()
-  vim.keymap.set('n', '<leader>sm', live_multigrep)
-end
+-- M.setup = function()
+--   vim.keymap.set('n', '<leader>sm', live_multigrep)
+-- end
 
 return M

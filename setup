@@ -757,13 +757,33 @@ textlint
 -- ovo radi na obe branch
 vim.keymap.set('n', '<leader>x', '<cmd>q!<CR>')
 
-
+stavio novi nvim na vps alma linux, ali sam morao usera vladanan da ubacim u grupu vladan (sudo usermod -aG vladan vladanan) da bih mogao da linkujem .config/nvim tako da ga zajedno koriste i da se samo vladan radi sa git operacijama za taj repo
+root uvek ima pristup tako da sam samo linkovao
 
 
 - da se pomeri multi grep dole gde je uvoz ili da se ubaci u uvezene nekako
+- da se pomere i ostala cackanja ako je moguce
+in plugin: { -- Autoformat 'stevearc/conform.nvim', we have: local enabled_filetypes = { lua = true, -- python = true, go = true, java = true, javascript = true, typescript = true, } and formatters_by_ft = { -- rust = { 'rustfmt' }, go = { 'gopls' }, java = { 'jdtls' }, typescript = { 'ts_ls' }, javascript = { 'ts_ls' }, }, which we also want to leave with init.lua defaults and move/ovverride in another or existing file
 
+This part is actually conceptually wrong:
+go = { "gopls" },
+java = { "jdtls" },
+typescript = { "ts_ls" },
+javascript = { "ts_ls" },
+Those are LSP servers, not formatters.
+👉 conform.nvim expects formatters like:
+goimports
+gofmt
+prettier
+google-java-format
+eslint_d
+So later you may want:
+go = { "goimports", "gofmt" },
+java = { "google-java-format" },
+typescript = { "prettier" },
+javascript = { "prettier" },
+od formatera sam odustao jer za sada mi izgleda ne trebaju
 
-
-
+izbaceno je sve sto je moglo iz init.lua: lsp je delimicno moglo ali je pravilo probleme sa treesitter highlights, ostalo je prebaceno sto je bilo lako i sto ne bi dovelo do zbunjivanja a dodate su napomene radi jasnoce
 
 

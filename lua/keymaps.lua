@@ -12,6 +12,7 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagn
 
 -- (Primagean precice za Quickfix List: ctrl+j = cnext, ctrl+k cprev)
 -- kada se sa telescope uradi grr i dobije lista svi mesta gde se neka func ili type pojavljuje onda se sa Ctrl+q ceo spisak ubaci u Quickfix list, iz koje moze da se odabere neko od tih mesta (bez da se opet ide na grr), a cak i kad se iz quick fix liste izadje sa :q ili sa :cclose (vraca se naza kao i na svaki splitovani prozor sa ctrl+p ili strl+hjkl) i dalje ostaje aktivna tako da moze da se ide na sledece i prethodne pojave iz spiska sa :cnext i :cprev s tim sto ta dva mogu da se mapiraju sa precicama (Primagean: ctrl+j = cnext, ctrl+k cprev) tako da se lakse ide kroz kod tj. spisak pojava func/type/var
+-- ova dva su override za dva keymaps iz init.lua
 vim.keymap.set('n', '<C-j>', ':cnext<CR>', { desc = 'Down/next [j] in Quickfix list' })
 vim.keymap.set('n', '<C-k>', ':cprev<CR>', { desc = 'Up/prev [k] in Quickfix list' })
 
@@ -126,3 +127,6 @@ vim.keymap.set('n', '<BS>', '<C-w>', { desc = 'Map Backspace to Ctrl+w for (spli
 -- vim.keymap.set('n', 'Zz', 'ZQ', { noremap = true, desc = 'Quit without saving (like ZQ)' })
 -- ovo radi na obe branch
 vim.keymap.set('n', '<leader>x', '<cmd>q!<CR>')
+
+-- ovo je izbaceno iz init.lua pa da ne bi tamo bljao ovde je prebaceno
+vim.keymap.set('n', '<leader>ff', vim.cmd.Ex)
