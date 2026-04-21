@@ -737,12 +737,11 @@ git checkout root-vps
 zali se na pozivanje ruff lsp za python pa sam to komentovao
 rade keys i options ali nema ucitavanja i razvlacenja sa pluginovima
 
+na svako mesto gde se radi fetch/pull/push morao da da iskopiram keys za github i known_hosts: fujitsu root, vps vladan itd.
 
-
-
-
-
-videti oko mergovanja promena u master tako da ih ima i u root pogotovo oko mojih fajlova
+oko mergovanja promena u master tako da ih ima i u root pogotovo oko mojih fajlova:
+prekopiran status sa root-vps jer sam ga greskom tamo radio
+umesto komplikovanih git komandi bolje se samo jedan fajl iz jedne branch staviti negde privremeno u neki dir i onda u drugoj branch ga iskopirati iz privremenog dir
 
 treba da se instaliraju linteri itd kojih nema:
 css-lsp
@@ -752,4 +751,19 @@ tailwindcss-language-server
 templ
 textlint
 
+- iz nekog razloga Zz radi na master a ne radi na root-vps
+-- ovo radi normalno na master branch koja ima puno pluginova a ne radi na root-vps koji ih nema??
+-- vim.keymap.set('n', 'Zz', 'ZQ', { noremap = true, desc = 'Quit without saving (like ZQ)' })
+-- ovo radi na obe branch
+vim.keymap.set('n', '<leader>x', '<cmd>q!<CR>')
+
+
+
+
 - da se pomeri multi grep dole gde je uvoz ili da se ubaci u uvezene nekako
+
+
+
+
+
+
