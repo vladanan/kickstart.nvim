@@ -144,7 +144,8 @@ if &background ==# 'dark'
   hi TabLineSel guifg=#42c3fc guibg=#111110 gui=NONE cterm=NONE
   "hi Title guifg=NONE guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
   hi Title guifg=#36b23f guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
-  hi @markup guifg=#ffaf00 guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
+  "hi @markup guifg=#ffaf00 guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
+  hi @markup guifg=#dfa93d guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
   hi VertSplit guifg=#707070 guibg=#000000 gui=NONE cterm=NONE
   "hi Visual guifg=#ffaf00 guibg=#000000 gui=reverse cterm=reverse
   hi Visual guifg=#ffaf00 guibg=#000000 gui=NONE cterm=NONE
