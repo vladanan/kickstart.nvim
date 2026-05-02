@@ -151,3 +151,8 @@ function _G.GetComment()
 
   return prefix
 end
+
+-- ovo onesposobljava ovo jer na vps daje gresku iako na root na dev ne daje
+-- moglo bi kasnije da se naprave zasebne branch za root i za vps jer ne reaguje isto root na dev i root na vps
+-- Highlight when yanking (copying) text
+vim.api.nvim_del_augroup_by_name('kickstart-highlight-yank')
