@@ -148,7 +148,8 @@ if &background ==# 'dark'
   hi @markup guifg=#dfa93d guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
   hi VertSplit guifg=#707070 guibg=#000000 gui=NONE cterm=NONE
   "hi Visual guifg=#ffaf00 guibg=#000000 gui=reverse cterm=reverse
-  hi Visual guifg=#ffaf00 guibg=#000000 gui=NONE cterm=NONE
+  "hi Visual guifg=#ffaf00 guibg=#000000 gui=NONE cterm=NONE
+  hi Visual guifg=#ffaf00 guibg=NONE gui=NONE cterm=NONE
   hi VisualNOS guifg=NONE guibg=#303030 gui=NONE cterm=NONE
   hi WarningMsg guifg=#dadada guibg=NONE gui=NONE cterm=NONE
   hi NormalFloat guifg=#dadada guibg=NONE gui=NONE cterm=NONE
