@@ -93,7 +93,8 @@ if &background ==# 'dark'
       let g:terminal_color_{i} = g:terminal_ansi_colors[i]
     endfor
   endif
-  hi Normal guifg=#dadada guibg=#000000 gui=NONE cterm=NONE
+  "hi Normal guifg=#dadada guibg=#000000 gui=NONE cterm=NONE
+  hi Normal guifg=#ffffff guibg=#000000 gui=NONE cterm=NONE
   hi ColorColumn guifg=NONE guibg=#1c1c1c gui=NONE cterm=NONE
   hi Conceal guifg=NONE guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
   hi CurSearch guifg=#ff5fff guibg=#000000 gui=reverse cterm=reverse
@@ -144,10 +145,12 @@ if &background ==# 'dark'
   hi TabLineSel guifg=#42c3fc guibg=#111110 gui=NONE cterm=NONE
   "hi Title guifg=NONE guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
   hi Title guifg=#36b23f guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
-  hi @markup guifg=#ffaf00 guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
+  "hi @markup guifg=#ffaf00 guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
+  hi @markup guifg=#dfa93d guibg=NONE gui=NONE ctermfg=NONE ctermbg=NONE cterm=NONE
   hi VertSplit guifg=#707070 guibg=#000000 gui=NONE cterm=NONE
   "hi Visual guifg=#ffaf00 guibg=#000000 gui=reverse cterm=reverse
-  hi Visual guifg=#ffaf00 guibg=#000000 gui=NONE cterm=NONE
+  "hi Visual guifg=#ffaf00 guibg=#000000 gui=NONE cterm=NONE
+  hi Visual guifg=#ffaf00 guibg=NONE gui=NONE cterm=NONE
   hi VisualNOS guifg=NONE guibg=#303030 gui=NONE cterm=NONE
   hi WarningMsg guifg=#dadada guibg=NONE gui=NONE cterm=NONE
   hi NormalFloat guifg=#dadada guibg=NONE gui=NONE cterm=NONE
