@@ -130,3 +130,47 @@ vim.keymap.set('n', '<leader>x', '<cmd>q!<CR>')
 
 -- ovo je izbaceno iz init.lua pa da ne bi tamo bljao ovde je prebaceno
 vim.keymap.set('n', '<leader>ff', vim.cmd.Ex)
+
+local function spring_boot_hot_reload()
+  vim.cmd 'write'
+
+  -- HARDCODED: Replace this with the exact absolute path to your project root on your host machine
+  local project_root = '/home/vladan/src/frenki/cpaas/cpaas-portal/backend'
+
+  local mvnw_path = project_root .. '/mvnw'
+  local trigger_path = project_root .. '/.reload-trigger'
+
+  -- Verify that mvnw exists at the hardcoded path
+  if vim.fn.filereadable(mvnw_path) == 0 then
+    print('❌ Error: mvnw not found at hardcoded path: ' .. mvnw_path)
+    return
+  end
+
+  print('🛠️ Compiling via: ' .. mvnw_path)
+
+  -- Run the compilation using absolute paths
+  vim.fn.jobstart({ mvnw_path, 'compile' }, {
+    -- Run the process inside the project root directory context
+    cwd = project_root,
+    stdout_buffered = true,
+    stderr_buffered = true,
+    on_exit = function(_, exit_code, _)
+      if exit_code == 0 then
+        -- Open file using its explicit absolute path
+        local handle = io.open(trigger_path, 'w')
+        if handle then
+          local timestamp = tostring(os.date '%Y-%m-%d %H:%M:%S')
+          handle:write(timestamp)
+          handle:close()
+          print('🚀 Hot reload triggered! Updated: ' .. trigger_path)
+        else
+          print('❌ Error: Could not write to absolute path: ' .. trigger_path)
+        end
+      else
+        print '❌ Compilation failed! Check Maven logs.'
+      end
+    end,
+  })
+end
+
+vim.keymap.set('n', '<leader>m', spring_boot_hot_reload, { desc = 'Save, compile via hardcoded mvnw path, and hot-reload' })
