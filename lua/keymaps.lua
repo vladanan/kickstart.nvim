@@ -74,7 +74,8 @@ vim.keymap.set({ 'n', 'v' }, '<leader>w', '<cmd>wa<cr><esc>', { desc = 'Save all
 vim.keymap.set('n', '<F29>', 'a<C-R>=strftime("%F %T")<CR><Esc>', { desc = 'This appends the current date and time after the cursor' })
 
 -- niz komandi za yank, search and replace
-vim.keymap.set('v', '<leader>y', 'y:%s/<C-r>"/', { desc = '[Y]ank, search and replace on selected text in visual mode' })
+--vim.keymap.set('v', '<leader>y', 'y:%s/<C-r>"/', { desc = '[Y]ank, search and replace on selected text in visual mode' })
+vim.keymap.set('v', '<leader>y', 'y:<C-u>.,$s/<C-r>"/', { desc = '[Y]ank, search and replace from current line' })
 
 -- -- da se kursor popne na def func uz pomoc nvim-treesitter/nvim-treesitter-context plugin koji je instaliran u ../lua/custom/plugins/init.lua
 -- -- smeta za git diff ]c - jump to start of next change, [c - jump to start of previous change
@@ -131,46 +132,25 @@ vim.keymap.set('n', '<leader>x', '<cmd>q!<CR>')
 -- ovo je izbaceno iz init.lua pa da ne bi tamo bljao ovde je prebaceno
 vim.keymap.set('n', '<leader>ff', vim.cmd.Ex)
 
-local function spring_boot_hot_reload()
-  vim.cmd 'write'
+local function mvn_compile()
+  local root = vim.fs.root(0, { 'mvnw', 'pom.xml' }) or vim.fn.expand '~/src/frenki/cpaas/cpaas-portal/backend'
 
-  -- HARDCODED: Replace this with the exact absolute path to your project root on your host machine
-  local project_root = '/home/vladan/src/frenki/cpaas/cpaas-portal/backend'
+  local cmd = { root .. '/mvnw', 'compile' }
 
-  local mvnw_path = project_root .. '/mvnw'
-  local trigger_path = project_root .. '/.reload-trigger'
+  vim.system(cmd, {
+    text = true,
+    cwd = root,
+  }, function(obj)
+    vim.schedule(function()
+      local output = table.concat({ obj.stdout or '', obj.stderr or '' }, '\n')
 
-  -- Verify that mvnw exists at the hardcoded path
-  if vim.fn.filereadable(mvnw_path) == 0 then
-    print('❌ Error: mvnw not found at hardcoded path: ' .. mvnw_path)
-    return
-  end
-
-  print('🛠️ Compiling via: ' .. mvnw_path)
-
-  -- Run the compilation using absolute paths
-  vim.fn.jobstart({ mvnw_path, 'compile' }, {
-    -- Run the process inside the project root directory context
-    cwd = project_root,
-    stdout_buffered = true,
-    stderr_buffered = true,
-    on_exit = function(_, exit_code, _)
-      if exit_code == 0 then
-        -- Open file using its explicit absolute path
-        local handle = io.open(trigger_path, 'w')
-        if handle then
-          local timestamp = tostring(os.date '%Y-%m-%d %H:%M:%S')
-          handle:write(timestamp)
-          handle:close()
-          print('🚀 Hot reload triggered! Updated: ' .. trigger_path)
-        else
-          print('❌ Error: Could not write to absolute path: ' .. trigger_path)
-        end
+      if obj.code == 0 then
+        vim.notify('Maven compile OK ✔', vim.log.levels.INFO)
       else
-        print '❌ Compilation failed! Check Maven logs.'
+        vim.notify('Maven compile FAILED ✘\n\n' .. output, vim.log.levels.ERROR)
       end
-    end,
-  })
+    end)
+  end)
 end
 
-vim.keymap.set('n', '<leader>m', spring_boot_hot_reload, { desc = 'Save, compile via hardcoded mvnw path, and hot-reload' })
+vim.keymap.set('n', '<leader>m', mvn_compile, { desc = 'Run mvmw compile and output error' })
